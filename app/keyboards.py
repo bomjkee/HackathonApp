@@ -1,5 +1,4 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton,  InlineKeyboardMarkup, InlineKeyboardButton
-import emoji
 
 main = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text='Посещаемость  🚩', callback_data='attedance'), InlineKeyboardButton(text='Другое  💱', callback_data='other')],

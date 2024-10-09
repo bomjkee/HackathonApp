@@ -1,4 +1,2 @@
-token.json
-.venv
-__pycache__
+config.py
 .venv

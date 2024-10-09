@@ -1,18 +1,10 @@
 import asyncio
 import logging
-import json # work with json file
-
 from aiogram import Bot, Dispatcher
 from app.handlers import router
+from config import TOKEN
 
-'''
-with open('token.json', 'r') as file:
-    config = json.load(file)
-'''
-
-config = json.load(open('token.json', 'r'))
-
-bot = Bot(config["settings"]["token"])
+bot = Bot(TOKEN)
 dp = Dispatcher()
 
 

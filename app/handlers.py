@@ -1,7 +1,6 @@
 from aiogram import F, Router, types, Dispatcher
 from aiogram.filters import CommandStart, Command
 from aiogram.types import Message, CallbackQuery, InputFile
-import emoji
 import app.keyboards as kb
 from random import randint
 
