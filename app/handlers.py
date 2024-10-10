@@ -13,7 +13,7 @@ async def cmd_start(message: Message):
 
 @router.message(Command('info'))
 async def cmd_info(message: Message):
-    await message.answer(f"```\nprint('Привет, мир!')\n```", parse_mode='HTML')
+    await message.answer(f"```py\nprint('Привет, мир!')\n```", parse_mode='HTML')
 
 
 @router.message(F.text)
