@@ -8,7 +8,8 @@ from users.handlers import router
 
 load_dotenv()
 TOKEN = os.getenv('TOKEN')
-admins = [805550691]
+ADMIN = os.getenv('ADMINS_ID')
+admins = ADMIN.split(',')
 
 bot = Bot(TOKEN)
 dp = Dispatcher()
