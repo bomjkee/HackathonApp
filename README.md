@@ -17,67 +17,43 @@
 ### Структура проекта
 
 ```
-├── telegram-bot/
-│   ├── migration/
-│   │   ├── versions
-│   │   ├── env.py
-│   ├── dao/
-│   │   ├── base.py
-│   ├── users/
-│   │   ├── dao.py
-│   │   ├── keyboards.py
-│   │   ├── models.py
-│   │   └── router.py
-│   │   ├── utils.py
-│   └── config.py
-│   ├── database.py
-│   ├── main.py
-├── data/
-│   ├── db
-├── alembic.ini
-├── .env
-└── requirements.txt
+
 ├── app/
-│   ├── dao/
-│   │   ├── base.py
-│   ├── migration/
-│   │   ├── versions
-│   │   ├── env.py
-|   ├── static/
-|   |   |── css/
-|   |   |   |── style.css
-|   |   |── img
-|   |   |── js
-|   |   |   |── script.js
-|   |   |── index.html
-│   ├── users/
-│   │   ├── dao.py
-│   │   ├── keyboards.py
-│   │   ├── models.py
-│   │   └── router.py
-│   │   ├── utils.py
-│   └── config.py
-│   ├── database.py
-│   ├── log.txt
+│   ├── db/
+│   │   ├── dao/
+|   |   |   |── base.py
+│   |   ├── migrations/
+│   │   |   ├── versions/
+│   │   |   ├── env.py
+│   |   ├── database.py
+|   |   ├── models.py
+|   |   |── dao.py
+│   ├── routers/
+|   |── typization/
 |   |── main.py
-├── data/
-│   ├── db.sqlite3
-├── alembic.ini
+├── bot/
+│   ├── handlers/
+│   │   ├── admin_router.py
+│   │   ├── user_router.py
+│   ├── keyboards/
+│   │   ├── admin_keyboards.py
+│   │   ├── user_keyboards.py
+│   ├── bot.py
+│   ├── run.py
+├── static/
+|   |── css/
+|   |   |── normalize.css
+|   |── img/
+|   |   |── arrow.png
+|   |   |── background.jpg
+|   |── index.html
 ├── .env
+├── .gitignore
+├── alembic.ini
+├── config.py
+├── log.txt
 └── requirements.txt
 ```
-
-### Компоненты мини-сервиса
-
-Каждый мини-сервис имеет следующую структуру:
-
-- **keyboards.py**: Клавиатуры Telegram
-- **dao.py**: Объекты доступа к базе данных через SQLAlchemy
-- **models.py**: Модели SQLAlchemy, специфичные для сервиса
-- **utils.py**: Вспомогательные функции и утилиты
-- **handlers.py**: Обработчики Aiogram для сервиса
-
-## Конфигурация
 
 ### Переменные окружения
 
@@ -87,9 +63,6 @@
 BOT_TOKEN=your_bot_token_here
 ADMIN_IDS=[12345,344334]
 ```
-
-- `BOT_TOKEN`: Получите у [BotFather](https://t.me/BotFather)
-- `ADMIN_IDS`: Список Telegram ID администраторов бота. Можно получить тут Получите у [IDBot Finder Pro](https://t.me/get_tg_ids_universeBOT)
 
 ### Зависимости
 
@@ -112,20 +85,22 @@ SQLAlchemy==2.0.35
 class Base(AsyncAttrs, DeclarativeBase):
     __abstract__ = True
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    created_at: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now())
+    created_at: Mapped[datetime] = mapped_column(
+        TIMESTAMP,
+        server_default=func.now()
+    )
     updated_at: Mapped[datetime] = mapped_column(
         TIMESTAMP,
         server_default=func.now(),
         onupdate=func.now()
     )
 
-    @classmethod
-    @property
+    @declared_attr
     def __tablename__(cls) -> str:
         return cls.__name__.lower() + 's'
 
     def to_dict(self) -> dict:
+        # Метод для преобразования объекта в словарь
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 ```
 
