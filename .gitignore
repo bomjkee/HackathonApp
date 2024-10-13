@@ -6,3 +6,4 @@ __pycache__/
 .idea/
 **/.idea/
 docker-compose.yml
+app/migrations/script.py.mako
