@@ -21,16 +21,47 @@
 │   ├── migration/
 │   │   ├── versions
 │   │   ├── env.py
+│   ├── dao/
+│   │   ├── base.py
 │   ├── users/
+│   │   ├── dao.py
 │   │   ├── keyboards.py
 │   │   ├── models.py
+│   │   └── router.py
 │   │   ├── utils.py
-│   │   └──handlers.py
+│   └── config.py
 │   ├── database.py
 │   ├── main.py
-│   └── config.py
 ├── data/
 │   ├── db
+├── alembic.ini
+├── .env
+└── requirements.txt
+├── app/
+│   ├── dao/
+│   │   ├── base.py
+│   ├── migration/
+│   │   ├── versions
+│   │   ├── env.py
+|   ├── static/
+|   |   |── css/
+|   |   |   |── style.css
+|   |   |── img
+|   |   |── js
+|   |   |   |── script.js
+|   |   |── index.html
+│   ├── users/
+│   │   ├── dao.py
+│   │   ├── keyboards.py
+│   │   ├── models.py
+│   │   └── router.py
+│   │   ├── utils.py
+│   └── config.py
+│   ├── database.py
+│   ├── log.txt
+|   |── main.py
+├── data/
+│   ├── db.sqlite3
 ├── alembic.ini
 ├── .env
 └── requirements.txt
