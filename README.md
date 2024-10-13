@@ -18,16 +18,20 @@
 
 ```
 ├── telegram-bot/
-|   |
+│   ├── migration/
+│   │   ├── versions
+│   │   ├── env.py
 │   ├── users/
 │   │   ├── keyboards.py
 │   │   ├── models.py
 │   │   ├── utils.py
 │   │   └──handlers.py
 │   ├── database.py
-│   ├── run.py 
+│   ├── main.py
+│   └── config.py
 ├── data/
-│   ├── db.sqlite3
+│   ├── db
+├── alembic.ini
 ├── .env
 └── requirements.txt
 ```
