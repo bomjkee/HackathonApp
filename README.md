@@ -1,4 +1,4 @@
-# Шаблон Telegram бота на Aiogram 3 + SQLAlchemy
+# Telegram бот на Aiogram 3 + SQLAlchemy
 
 Данный проект представляет собой Telegram бота с интеграцией MiniApp и использованием фреймворка **Aiogram 3**, **SQLAlchemy** для работы с базой данных.
 
@@ -17,7 +17,6 @@
 ### Структура проекта
 
 ```
-
 ├── app/
 │   ├── db/
 │   │   ├── dao/
