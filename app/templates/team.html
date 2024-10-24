@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %} {{ title }} {% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/team.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="team-container">
+        <h2>{{ team.name }}</h2>
+        <p>Тип: {{ 'Открытая' if team.is_open else 'Закрытая' }}</p>
+        <h3>Участники команды</h3>
+        <ul>
+            {% for member in team.members %}
+                <li>
+                    <a href="https://t.me/{{ member.username }}" target="_blank">@{{ member.username }}</a>
+                    <p>{{ member.role }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <footer>
+        <button class="button-footer" onclick="window.location.href='/hackathon'">Хакатон</button>
+        <button class="button-footer" onclick="window.location.href='/profile'" style="background-color: #0f332a;">Профиль</button>
+    </footer>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

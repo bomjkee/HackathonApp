@@ -7,6 +7,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.client.default import DefaultBotProperties
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+
 class Settings(BaseSettings):
     BOT_TOKEN: str
     SITE_URL: str
@@ -21,7 +22,9 @@ class Settings(BaseSettings):
 
 settings = Settings()
 
+
 bot = Bot(token=settings.BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+bot_token = settings.BOT_TOKEN
 dp = Dispatcher(storage=MemoryStorage())
 admins = settings.ADMINS_ID
 database_url = settings.DB_URL

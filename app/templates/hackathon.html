@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %} {{ title }} {% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/hackathon.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <img class="img-hack" src="{{ url_for('static', path='img/hack.png') }}" alt="hackathon-img">
+        <h1>{{ hackathon.name }}</h1>
+        <p>{{ hackathon.description }}</p>
+        <h2 style="margin-bottom: 16px;">Расписание</h2>
+        <div class="content-dd" id="content-dd">
+            <div class="dd-info">
+                <h3 style="color: #00FCBF;">[{{ hackathon.start_date.strftime('%Y-%m-%d %H:%M') }} ]</h3>
+                <h3 style="margin-left: 10px;">ОТБОРОЧНЫЙ ТУР</h3>
+            </div>
+        </div>
+        <button class="btn-reg" onclick="window.location.href='/reg'">ЗАПИСАТЬСЯ</button>
+        <footer>
+            <button class="button-footer" onclick="window.location.href='/hackathon'"
+                    style="background-color: #0f332a;">Хакатон
+            </button>
+            <button class="button-footer" onclick="window.location.href='/profile'">Профиль</button>
+        </footer>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', path='js/hackathon.js') }}"></script>
+{% endblock %}
+

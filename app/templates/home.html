@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %} {{ title }} {% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/home.css') }}">
+{% endblock %}
+{% block content %}
+    <div class="introduction" id="default">
+        <div class="img-back">
+            <img class="img-line-top" src="{{ url_for('static', path='img/lineup.png') }}" alt="lineup">
+            <img class="img-gerb" src="{{ url_for('static', path='img/MIREA.png') }}" alt="gerb">
+            <img class="img-line-bottom" src="{{ url_for('static', path='img/linebottom.png') }}" alt="linebottom">
+        </div>
+
+        <div class="content">
+            <h1 class="main-title">Хакатоны</h1>
+            <p class="main-text" data-end=".">РТУ МИРЭА</p>
+            <button class="btn-open" onclick="window.location.href='/hackathon'">НАЧАТЬ</button>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', path='js/home.js') }}"></script>
+{% endblock %}

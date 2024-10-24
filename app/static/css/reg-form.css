@@ -1,0 +1,93 @@
+.registration-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+    padding: 2em;
+}
+
+.registration-form h2 {
+    font-family: 'tektur';
+    font-size: 36px;
+    margin: 4em 0 2em;
+}
+
+.registration-form h2::after {
+    content: attr(data-end);
+    color: #00FCBF;
+}
+
+.input-field {
+    width: 100%;
+}
+
+.input-field input{
+    border: 2px solid #00FCBF;
+    background-color: black;
+    border-radius: 6px;
+    height: 41px;
+    width: 100%;
+    margin: 10px 0;
+    font-family: 'bebas neue';
+    font-size: 20px;
+    padding-left: 10px;
+    color: #C3C3C3;
+}
+
+.input-field input::placeholder {
+    background-color: black;
+    color: #C3C3C3;
+}
+
+.input-field-select-option {
+    width: 100%;
+}
+
+.input-field-select-option select{
+    border: 2px solid #00FCBF;
+    background-color: black;
+    border-radius: 6px;
+    height: 41px;
+    width: 100%;
+    margin: 10px 0;
+    font-family: 'bebas neue';
+    font-size: 20px;
+    padding-top: 5px;
+    padding-left: 10px;
+    color: #C3C3C3;
+}
+
+.btn-reg {
+    border: 2px solid #00FCBF;
+    background-color: black;
+    border-radius: 42px;
+    height: 50px;
+    width: 80%;
+    padding: 5px 10px;
+    margin-top: 2em;
+    color: white;
+    font-size: 24px;
+    text-align: center;
+    cursor: pointer;
+    -webkit-box-shadow: 0px 5px 19px -5px rgba(0, 252, 191, 0.65);
+    -moz-box-shadow: 0px 5px 19px -5px rgba(0, 252, 191, 0.65);
+    box-shadow: 0px 5px 19px -5px rgba(0, 252, 191, 0.65);
+}
+
+.btn-reg:hover {
+    animation: fadeIn ease-in-out .75s forwards;
+}
+
+
+@keyframes fadeIn {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        background-color: rgb(102, 255, 178);
+        color: black;
+    }
+}
+

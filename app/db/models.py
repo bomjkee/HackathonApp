@@ -1,40 +1,55 @@
-from enum import unique
-
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import BigInteger, ForeignKey
+from sqlalchemy import Integer, BigInteger, ForeignKey, String, Boolean, DateTime, func, TIMESTAMP
+from datetime import datetime
+from typing import Optional, List
 
-from typing import Optional
-from app.database import Base
+from app.db.database import Base
 
 
 class User(Base):
-    id: Mapped[int] = mapped_column(int, primary_key=True)
-    telegram_id: Mapped[int] = mapped_column(BigInteger, unique=True, nullable=False)
-    username: Mapped[Optional[str]]
-    first_name: Mapped[Optional[str]]
-    last_name: Mapped[Optional[str]]
-    patronymic: Mapped[Optional[str]]
-    referral_id: Mapped[Optional[int]]
-    is_student: Mapped[Optinal[bool]]
+    tg_id: Mapped[int] = mapped_column(BigInteger, primary_key=True, unique=True)
+    username: Mapped[str] = mapped_column(String, unique=True)
+    full_name: Mapped[Optional[str]]
 
-    def __str__(self):
-        return (f"{self.__class__.__name__}(tg_id={self.id}, "
-                f"first_name={self.first_name!r}, "
-                f"last_name={self.last_name!r}), "
-                f"patronymic={self.patronymic!r}")
+    photo_url: Mapped[Optional[str]]
+    auth_date: Mapped[Optional[datetime]] = mapped_column(TIMESTAMP)
+    hash: Mapped[Optional[str]]
 
-    def __repr__(self):
-        return str(self)
-
-
-class Student(User):
-    id: Mapped[int] = mapped_column(int, primary_key=True)
-    user_id: Mapped[int] = mapped_column(BigInteger, ForeignKey('users.id'), nullable=False, unique=True)
-    group: Mapped[Optional[str]]
-    user: Mapped[User] = relationship('User', back_populates='student')
-
-
-class NonStudent(User):
-    id: Mapped[int] = mapped_column(int, primary_key=True)
-    user_id: Mapped[int] = mapped_column(BigInteger, ForeignKey('users.id'), nullable=False, unique=True)
+    fio: Mapped[Optional[str]]
+    is_mirea_student: Mapped[Optional[bool]]
     passport: Mapped[Optional[str]]
+
+    members: Mapped[List["Member"]] = relationship("Member", back_populates="user")
+
+
+class Team(Base):
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    name: Mapped[str]
+    is_open: Mapped[bool]
+
+    hackathon_id: Mapped[int] = mapped_column(Integer, ForeignKey("hackathons.id"))
+
+    hackathon: Mapped["Hackathon"] = relationship("Hackathon", back_populates="teams")
+    members: Mapped[List["Member"]] = relationship("Member", back_populates="team")
+
+
+class Hackathon(Base):
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    name: Mapped[str]
+    description: Mapped[str]
+    max_members: Mapped[int]
+    start_date: Mapped[datetime] = mapped_column(TIMESTAMP)
+    end_date: Mapped[datetime] = mapped_column(TIMESTAMP)
+
+    teams: Mapped[List["Team"]] = relationship("Team", back_populates="hackathon")
+
+
+class Member(Base):
+    member_id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    user_id: Mapped[int] = mapped_column(BigInteger, ForeignKey("users.tg_id"))
+    team_id: Mapped[int] = mapped_column(Integer, ForeignKey("teams.id"))
+    role: Mapped[Optional[str]]
+
+    user: Mapped["User"] = relationship("User", back_populates="members")
+    team: Mapped["Team"] = relationship("Team", back_populates="members")
+

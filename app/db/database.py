@@ -1,11 +1,10 @@
 from datetime import datetime
-from typing import Annotated
-
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncAttrs, AsyncSession
 from sqlalchemy import func, TIMESTAMP
 from sqlalchemy.orm import DeclarativeBase, declared_attr, mapped_column, Mapped
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncAttrs, AsyncSession
 
-from app.config import database_url
+
+from config import database_url
 
 
 engine = create_async_engine(url=database_url)
@@ -25,10 +24,10 @@ class Base(AsyncAttrs, DeclarativeBase):
         onupdate=func.now()
     )
 
+
     @declared_attr
     def __tablename__(cls) -> str:
         return cls.__name__.lower() + 's'
 
     def to_dict(self) -> dict:
-        # Метод для преобразования объекта в словарь
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
