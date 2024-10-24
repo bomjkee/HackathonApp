@@ -1,9 +1,7 @@
 import asyncio
-import os
-from loguru import logger
 from aiogram.types import BotCommand, BotCommandScopeDefault
-from handlers.admin_router import admin_router
-from config import bot, admins
+
+from config import bot, admins, logger
 
 
 async def set_commands():
