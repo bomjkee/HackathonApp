@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ url_for('static', path='/img/favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/base/normalize.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/base/style.css') }}">
+    <title>{% block title %} {% endblock %}</title>
+    {% block styles %} {% endblock %}
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+    </script>
+</head>
+<body>
+{% block content %} {% endblock %}
+
+
+{% block scripts %} {% endblock %}
+</body>
+</html>
+
+

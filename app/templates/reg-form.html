@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/reg-form.css') }}">
+{% endblock %}
+
+{% block content %}
+    <form class="registration-form" id="registration">
+        <h2 data-end=".">Регистрация</h2>
+
+        <div class="input-field">
+            <input type="text" id="username" placeholder="ФИО" maxlength="50" required>
+        </div>
+        <div class="input-field-select-option">
+            <select id="studentSelect" required>
+                <option value="">Выберите из предложенного</option>
+                <option value="1">Я студент РТУ МИРЭА</option>
+                <option value="0">Я учусь в другом месте</option>
+            </select>
+        </div>
+        <button class="btn-reg" onclick="window.location.href='/profile'">Зарегистрироваться</button>
+    </form>
+
+    <footer>
+        <button class="button-footer" onclick="window.location.href='/hackathon'">Хакатон</button>
+        <button class="button-footer" onclick="window.location.href='/profile'">Профиль</button>
+    </footer>
+{% endblock %}
