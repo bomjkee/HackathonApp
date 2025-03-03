@@ -36,7 +36,7 @@ class Settings(BaseSettings):
     )
 
     def get_webhook_url(self) -> str:
-        return f"{self.FRONT_SITE}/webhook"
+        return f"{self.BASE_SITE}/webhook"
 
     def get_redis_url(self) -> str:
         return f"redis://{self.REDIS_HOST}:{self.REDIS_PORT}/{self.REDIS_DB}"

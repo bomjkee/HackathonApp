@@ -53,7 +53,6 @@ class Member(Base):
     tg_name: Mapped[str]
     role: Mapped[str]
 
-
     user: Mapped["User"] = relationship("User", back_populates="members")
     team: Mapped["Team"] = relationship("Team", back_populates="members")
 

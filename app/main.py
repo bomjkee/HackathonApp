@@ -25,7 +25,7 @@ class CustomUvicornWorker(UvicornWorker):
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info("Starting bot setup...")
+    logger.info("Бот настраивается...")
 
     dp.update.middleware.register(DatabaseMiddlewareWithoutCommit())
     dp.update.middleware.register(DatabaseMiddlewareWithCommit())
@@ -42,16 +42,16 @@ async def lifespan(app: FastAPI):
         allowed_updates=dp.resolve_used_update_types(),
         drop_pending_updates=True
     )
-    logger.info(f"Webhook set to {webhook_url}")
+    logger.info(f"Установлен вебхук: {webhook_url}")
     yield
 
     await bot.delete_webhook(drop_pending_updates=True)
-    logger.info("Webhook deleted")
+    logger.info("Вебхук удален")
     await stop_bot()
-    logger.info("Shutting down bot...")
+    logger.info("Бот завершает работу")
 
 
-app = FastAPI()
+app = FastAPI(lifespan=lifespan)
 
 origins = [
     "http://localhost:5173",
@@ -70,14 +70,13 @@ app.add_exception_handler(Exception, exception_handler)
 
 app.mount('/static', StaticFiles(directory='app/static'), 'static')
 
-# @app.post("/webhook")
-# async def webhook(request: Request) -> None:
-#     logger.info("Обработка обновления...")
-#     update = Update.model_validate(await request.json(), context={"bot": bot})
-#     await dp.feed_update(bot, update)
-#     logger.info("Обновление обработано")
+@app.post("/webhook")
+async def webhook(request: Request) -> None:
+    logger.info("Обработка обновления...")
+    update = Update.model_validate(await request.json(), context={"bot": bot})
+    await dp.feed_update(bot, update)
+    logger.info("Обновление обработано")
 
-# Подключаем маршруты
 app.include_router(home.router)
 app.include_router(hackathon.router)
 app.include_router(team.router)

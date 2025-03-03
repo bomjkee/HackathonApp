@@ -54,9 +54,10 @@ class ProfileInfo(BaseModel):
 
 
 class SMember(BaseModel):
+    id: int = Field(0, description="ID участника")
     user_id: int = Field(..., description="ID пользователя")
     team_id: int = Field(..., description="ID команды")
-    username: str = Field(..., description="Tg username пользователя")
+    tg_name: str = Field(..., description="Tg username пользователя")
     role: str = Field(..., description="Роль участника")
 
 

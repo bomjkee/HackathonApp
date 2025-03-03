@@ -1,5 +1,6 @@
 import json
 from fastapi import APIRouter, Depends
+from pydantic_core import ErrorTypeInfo
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Union
 
@@ -83,7 +84,7 @@ async def get_hackathon_by_id(hackathon_id: int, session: AsyncSession = Depends
         raise
 
 
-@router.post("/{hackathon_id}/register", response_model=dict,
+@router.post("/{hackathon_id}/register", response_model=Union[dict, ErrorResponse],
              responses={400: {"model": ErrorResponse}})
 @exception_handler
 async def register_user_for_hackathon(hackathon_id: int,

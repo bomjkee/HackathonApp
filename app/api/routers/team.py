@@ -67,6 +67,7 @@ async def create_team(team: TeamCreate,
 
         new_team = await TeamDAO.add(session=session, values=team)
         await MemberDAO.add(session=session, values=SMember(user_id=user.id,
+                                                            username=user.username,
                                                             team_id=new_team.id,
                                                             role="leader"))
         team_list_cache_key = "all_teams"
@@ -92,12 +93,11 @@ async def get_team_by_id(team_id: int, session: AsyncSession = Depends(db.get_db
 
     try:
         cached_team_data = await redis.get(team_cache_key)
-
         if cached_team_data:
             team_data = json.loads(cached_team_data)
             logger.info("Команда из Redis")
 
-            team = STeam(**team_data["team"])
+            team = STeam(**convert_redis_data(team_data["team"]))
             members = [SMember(**convert_redis_data(member)) for member in team_data["members"]]
 
             return STeamWithMembers(team=team, members=members)

@@ -50,3 +50,5 @@ async def get_my_profile(session: AsyncSession = Depends(db.get_db),
         raise
 
 
+
+
