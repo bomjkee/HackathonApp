@@ -54,7 +54,7 @@ class ProfileInfo(BaseModel):
 
 
 class SMember(BaseModel):
-    id: int = Field(0, description="ID участника")
+    id: int = Field(..., description="ID участника")
     user_id: int = Field(..., description="ID пользователя")
     team_id: int = Field(..., description="ID команды")
     tg_name: str = Field(..., description="Tg username пользователя")
@@ -70,6 +70,9 @@ class SInvite(BaseModel):
     id: int = Field(..., description="ID приглашения")
     invite_user_id: int = Field(..., description="ID приглашаемого пользователя")
     team_id: int = Field(..., description="ID команды")
+
+class SUserCheckRegistration(BaseModel):
+    is_registered: bool = Field(False, description="Зарегистрирован ли пользователь в MiniApp")
 
 
 class Error(BaseModel):

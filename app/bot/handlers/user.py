@@ -1,11 +1,13 @@
 from aiogram import F, Router
 from aiogram.filters import CommandStart, Command
 from aiogram.types import Message, CallbackQuery
+from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.typization.schemas import TelegramIDModel, UserInfoFromBot
 from app.bot.keyboards.user_keyboards import main_keyboard, back_keyboard
 from app.db.dao import UserDAO
+from app.db.session_maker import db
 from config import bot
 
 router = Router()
@@ -13,6 +15,7 @@ router = Router()
 
 @router.message(CommandStart())
 async def cmd_start(message: Message, session_with_commit: AsyncSession) -> None:
+
     user = await UserDAO.find_one_or_none(session=session_with_commit, filters=(TelegramIDModel(telegram_id=message.from_user.id)))
 
     if not user:

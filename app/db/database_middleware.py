@@ -25,9 +25,11 @@ class BaseDatabaseMiddleware(BaseMiddleware):
                 await session.close()
 
     def set_session(self, data: Dict[str, Any], session) -> None:
+        """Метод для установки сессии в словарь данных."""
         raise NotImplementedError("Этот метод должен быть реализован в подклассах.")
 
     async def after_handler(self, session) -> None:
+        """Метод для выполнения действий после вызова хендлера (например, коммит)."""
         pass
 
 

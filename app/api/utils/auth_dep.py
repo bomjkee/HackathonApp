@@ -1,11 +1,14 @@
+from venv import logger
+
 from fastapi import Request, Depends
+from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta, timezone
 from fastapi.responses import Response
 
 from app.db.dao import UserDAO
 from config import settings, admins, redis
-from app.db.session_maker_fast_api import db
+from app.db.session_maker import db
 from app.api.typization.schemas import TelegramIDModel
 from app.api.typization.responses import SUser
 from app.api.utils.redis_operations import redis_data, make_user_active
@@ -31,6 +34,7 @@ async def fast_auth_user(request: Request):
 
     if authorization_status:
         user_data = await redis_data(dict_data["user"]["id"])
+        logger.info(f"Аутентификация пользователя {dict_data["user"]["username"]}")
         return user_data
     else:
         raise AuthException

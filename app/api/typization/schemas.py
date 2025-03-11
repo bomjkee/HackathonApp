@@ -43,6 +43,17 @@ class TeamCreate(BaseModel):
     hackathon_id: int = Field(..., description="ID хакатона")
 
 
+class MemberCreate(BaseModel):
+    user_id: int = Field(..., description="ID пользователя")
+    team_id: int = Field(..., description="ID команды")
+    tg_name: str = Field(..., description="Tg username пользователя")
+    role: str = Field(..., description="Роль участника")
+
+class MemberLeaderFind(BaseModel):
+    user_id: int = Field(..., description="ID пользователя")
+    team_id: int = Field(..., description="ID команды")
+    role: str = Field(..., description="Роль участника")
+
 class InviteFilter(BaseModel):
     invite_user_id: int = Field(..., description="ID приглашаемого пользователя")
 

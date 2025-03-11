@@ -29,7 +29,7 @@ class Team(Base):
     name: Mapped[str]
     is_open: Mapped[bool]
     description: Mapped[str | None]
-    hackathon_id: Mapped[int] = mapped_column(Integer, ForeignKey("hackathons.id"))
+    hackathon_id: Mapped[int] = mapped_column(Integer, ForeignKey("hackathons.id", ondelete="CASCADE"))
 
     hackathon: Mapped["Hackathon"] = relationship("Hackathon", back_populates="teams")
     members: Mapped[List["Member"]] = relationship("Member", back_populates="team")
@@ -49,7 +49,7 @@ class Hackathon(Base):
 
 class Member(Base):
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"))
-    team_id: Mapped[int] = mapped_column(Integer, ForeignKey("teams.id"))
+    team_id: Mapped[int] = mapped_column(Integer, ForeignKey("teams.id", ondelete="CASCADE"))
     tg_name: Mapped[str]
     role: Mapped[str]
 
@@ -58,7 +58,7 @@ class Member(Base):
 
 
 class Invite(Base):
-    team_id: Mapped[int] = mapped_column(Integer, ForeignKey("teams.id"))
+    team_id: Mapped[int] = mapped_column(Integer, ForeignKey("teams.id", ondelete="CASCADE"))
     invite_user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"))
 
     team: Mapped["Team"] = relationship("Team", back_populates="invites")

@@ -2,15 +2,17 @@ import json
 from aiogram import F, Router
 from aiogram.filters import CommandStart, Command
 from aiogram.types import Message, CallbackQuery
+from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.typization.exceptions import TeamNotFoundException, InvitationNotFoundException, \
     MaxTeamMembersExceededException, ForbiddenException, UserNotRegisteredForHackathon
 from app.api.typization.responses import SMember, SInvite
 from app.api.typization.schemas import TelegramIDModel, UserInfoFromBot, IdModel, InviteFilter
-from app.api.utils.redis_operations import convert_redis_data, is_user_registered_for_hackathon
+from app.api.utils.redis_operations import convert_redis_data
 from app.bot.keyboards.user_keyboards import main_keyboard, back_keyboard, invite_keyboard
 from app.db.dao import UserDAO, MemberDAO, TeamDAO, HackathonDAO, InviteDAO
+from app.db.session_maker import db
 from config import bot, redis, logger
 
 router = Router()
@@ -54,10 +56,6 @@ async def accept_invite(call: CallbackQuery, session_with_commit: AsyncSession) 
         if not team:
             raise TeamNotFoundException
 
-        is_registered = await is_user_registered_for_hackathon(user_id=user_id, hackathon_id=team.hackathon_id, session=session_with_commit)
-        if not is_registered:
-            raise UserNotRegisteredForHackathon
-
         members_count = await MemberDAO.count(session=session_with_commit, filters=IdModel(id=team_id))
         hackathon = await HackathonDAO.find_one_or_none(session=session_with_commit,
                                                         filters=IdModel(id=team.hackathon_id))
@@ -77,7 +75,7 @@ async def accept_invite(call: CallbackQuery, session_with_commit: AsyncSession) 
 
         leader = await MemberDAO.find_one_or_none(session=session_with_commit, filters=SMember(team_id=invite.team_id,
                                                                                                user_id=user_id,
-                                                                                               role="leader"))
+                                                  role="leader"))
         if not leader:
             raise ForbiddenException
         leader_user = await UserDAO.find_one_or_none(session=session_with_commit, filters=IdModel(id=user_id))
@@ -108,7 +106,7 @@ async def reject_invite(call: CallbackQuery, session_with_commit: AsyncSession) 
         _, __, invite_id = call.data.split("_")
         user_id = call.from_user.id
 
-        invite_key = f"invite:{invite_id}"
+        invite_key = f"invite:{invite_id}:{user_id}"
         invite_data = await redis.get(invite_key)
 
         if invite_data:

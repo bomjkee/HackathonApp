@@ -51,13 +51,10 @@ admins = settings.ADMINS_ID
 
 front_site_url = settings.FRONT_SITE
 base_site_url = settings.BASE_SITE
+
 db_url = settings.DB_URL
 redis = Redis.from_url(url=settings.get_redis_url(), socket_timeout=20)
 
-
-# apscheduler = AsyncIOScheduler(
-#     jobstores={'default': RedisJobStore(url=settings.STORE_URL)}
-# )
 log_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "log.txt")
 logger.add(log_file_path, format=settings.FORMAT_LOG, level="INFO", rotation=settings.LOG_ROTATION)
 

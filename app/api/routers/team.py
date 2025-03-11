@@ -5,12 +5,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.utils.auth_dep import fast_auth_user
 from config import redis, logger, bot
-from app.api.typization.schemas import IdModel, NameModel, TeamCreate, InviteCreate
+from app.api.typization.schemas import IdModel, NameModel, TeamCreate, InviteCreate, MemberCreate, MemberLeaderFind
 from app.db.dao import TeamDAO, MemberDAO, HackathonDAO, InviteDAO
 from app.api.utils.api_utils import exception_handler
 from app.api.utils.redis_operations import convert_redis_data, make_user_active
 from app.api.typization.responses import STeam, SMember, SUser, ErrorResponse, STeamWithMembers, SInvite
-from app.db.session_maker_fast_api import db
+from app.db.session_maker import db
 from app.bot.keyboards.user_keyboards import invite_keyboard
 from app.api.typization.exceptions import (TeamNotFoundException, TeamsNotFoundException,
                                            TeamNameAlreadyExistsException, ForbiddenException,
@@ -66,14 +66,14 @@ async def create_team(team: TeamCreate,
             raise TeamNameAlreadyExistsException
 
         new_team = await TeamDAO.add(session=session, values=team)
-        await MemberDAO.add(session=session, values=SMember(user_id=user.id,
-                                                            username=user.username,
+        await MemberDAO.add(session=session, values=MemberCreate(user_id=user.get("id"),
+                                                            tg_name=user.get("username"),
                                                             team_id=new_team.id,
                                                             role="leader"))
         team_list_cache_key = "all_teams"
         await redis.delete(team_list_cache_key)
 
-        await make_user_active(user_id=str(user.id))
+        await make_user_active(user_id=str(user.get("telegram_id")))
 
         return new_team
 
@@ -179,8 +179,8 @@ async def delete_team(team_id: int, session: AsyncSession = Depends(db.get_db_wi
         if not team_data:
             raise TeamNotFoundException
 
-        leader = await MemberDAO.find_one_or_none(session=session, filters=SMember(team_id=team_id,
-                                                                                   user_id=user.id,
+        leader = await MemberDAO.find_one_or_none(session=session, filters=MemberLeaderFind(team_id=team_id,
+                                                                                   user_id=user.get("id"),
                                                                                    role="leader"))
         if not leader:
             raise ForbiddenException
@@ -193,7 +193,7 @@ async def delete_team(team_id: int, session: AsyncSession = Depends(db.get_db_wi
         team_cache_key = f"team:{team_id}"
         await redis.delete(team_cache_key)
 
-        await make_user_active(user_id=str(user.id))
+        await make_user_active(user_id=str(user.get("telegram_id")))
 
         return {"message": "Команда успешно удалена"}
 
@@ -249,7 +249,7 @@ async def invite_user_to_team(invite: InviteCreate,
 
 
 
-@router.post("/leave_team/{team_id}", response_model=dict,
+@router.post("/{team_id}/leave", response_model=dict,
              responses={400: {"model": ErrorResponse}})
 @exception_handler
 async def leave_team(team_id: int, session: AsyncSession = Depends(db.get_db_with_commit),

@@ -14,7 +14,7 @@ from fastapi import HTTPException
 from app.api.typization.schemas import TelegramIDModel
 from app.api.typization.exceptions import AuthException
 from app.api.utils.redis_operations import redis_data
-from app.db.session_maker_fast_api import db
+from app.db.session_maker import db
 from app.db.dao import UserDAO
 from config import settings
 

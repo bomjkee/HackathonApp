@@ -7,13 +7,13 @@ from app.api.routers import home, hackathon, team
 from app.api.utils.api_utils import exception_handler
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
-from app.db.database_middleware_aiogram import DatabaseMiddlewareWithoutCommit, DatabaseMiddlewareWithCommit
 from fastapi.staticfiles import StaticFiles
 from aiogram.types import Update
 
 from config import dp, bot, settings, front_site_url
 from app.bot.handlers import user, admin, invite
 from app.bot.main import start_bot, stop_bot
+from app.db.database_middleware import DatabaseMiddlewareWithoutCommit, DatabaseMiddlewareWithCommit
 
 
 class CustomUvicornWorker(UvicornWorker):
@@ -51,7 +51,7 @@ async def lifespan(app: FastAPI):
     logger.info("Бот завершает работу")
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI()
 
 origins = [
     "http://localhost:5173",
@@ -60,7 +60,7 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -68,10 +68,9 @@ app.add_middleware(
 
 app.add_exception_handler(Exception, exception_handler)
 
-app.mount('/static', StaticFiles(directory='app/static'), 'static')
-
 @app.post("/webhook")
 async def webhook(request: Request) -> None:
+    """Устанавливает вебхук для получения обновлений от телеграма"""
     logger.info("Обработка обновления...")
     update = Update.model_validate(await request.json(), context={"bot": bot})
     await dp.feed_update(bot, update)

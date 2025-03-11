@@ -6,10 +6,10 @@ from typing import List, Union
 
 from config import redis, logger
 from app.db.dao import HackathonDAO, UserDAO
-from app.db.session_maker_fast_api import db
+from app.db.session_maker import db
 from app.api.utils.auth_dep import fast_auth_user
 from app.api.utils.api_utils import exception_handler
-from app.api.utils.redis_operations import convert_redis_data, redis_data, is_user_registered_for_hackathon
+from app.api.utils.redis_operations import convert_redis_data, redis_data
 from app.api.typization.responses import SHackathonInfo, SHackathons, SUser, ErrorResponse
 from app.api.typization.schemas import IdModel, UserInfoUpdate
 from app.api.typization.exceptions import HackathonNotFoundException, HackathonsNotFoundException, UserNotFoundException
@@ -84,40 +84,3 @@ async def get_hackathon_by_id(hackathon_id: int, session: AsyncSession = Depends
         raise
 
 
-@router.post("/{hackathon_id}/register", response_model=Union[dict, ErrorResponse],
-             responses={400: {"model": ErrorResponse}})
-@exception_handler
-async def register_user_for_hackathon(hackathon_id: int,
-                                      user_info: UserInfoUpdate,
-                                      session: AsyncSession = Depends(db.get_db_with_commit),
-                                      user: SUser = Depends(fast_auth_user)) -> dict:
-    """Регистрирует пользователя на хакатон."""
-    try:
-        hackathon = await HackathonDAO.find_one_or_none(session=session, filters=IdModel(id=hackathon_id))
-        if not hackathon:
-            raise HackathonNotFoundException
-
-        registration_status = await is_user_registered_for_hackathon(user_id=user.id, hackathon_id=hackathon.id, session=session)
-        if registration_status:
-            raise
-
-
-        user = await UserDAO.update(session=session, filters=IdModel(id=user.id), values=user_info)
-        if not user:
-            raise UserNotFoundException
-
-
-
-        user_key = f"user_info:{user.id}"
-        await redis.hset(user_key, mapping={
-            "full_name": user.full_name,
-            "is_student_mirea": user.is_student_mirea,
-            "group": user.group
-        })
-        await redis.expire(user_key, 3600)
-
-        return {"message": "Пользователь успешно зарегистрирован"}
-
-    except Exception as e:
-        logger.error(f"Ошибка при регистрации пользователя на хакатон: {e}")
-        raise
