@@ -1,49 +1,47 @@
-from typing import Any, Tuple, Dict, Union
-from fastapi import APIRouter, Depends, HTTPException
-from fastapi.responses import JSONResponse
+from typing import Union
+from fastapi import APIRouter, Depends
 from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi.requests import Request
-from fastapi.responses import Response, RedirectResponse
-
-from app.api.typization.exceptions import HackathonNotFoundException, UserNotFoundException
-from app.db.dao import UserDAO, TeamDAO, HackathonDAO
+from app.api.typization.exceptions import UserNotFoundException, UserAlreadyExistsException
+from app.db.dao import UserDAO, TeamDAO
 from app.api.utils.api_utils import exception_handler
-from app.api.utils.auth_dep import fast_auth_user, get_authenticated_user
+from app.api.utils.auth_dep import fast_auth_user
 
-from app.api.typization.schemas import TelegramIDModel, UserInfoUpdate, IdModel
-from app.api.typization.responses import SUser, ErrorResponse, SUserInfo, STeam, ProfileInfo, SUserCheckRegistration
+from app.api.typization.schemas import UserInfoUpdate, IdModel
+from app.api.typization.responses import SUser, ErrorResponse, SUserInfo, STeam, ProfileInfo, SUserCheckRegistration, SuccessResponse
 from app.db.session_maker import db
-from app.api.utils.redis_operations import make_user_active
 from config import redis
 
-router = APIRouter()
+router = APIRouter(prefix="Работа с пользователем и Telegram")
 
 
-@router.post("/register", response_model=Union[dict, ErrorResponse],
+@router.post("/register", response_model=Union[SuccessResponse, ErrorResponse],
              responses={400: {"model": ErrorResponse}})
 @exception_handler
 async def register_user(user_info: UserInfoUpdate,
                         session: AsyncSession = Depends(db.get_db_with_commit),
-                        user: SUser = Depends(fast_auth_user)) -> dict:
+                        user: SUser = Depends(fast_auth_user)) -> SuccessResponse:
     """Регистрирует пользователя (обновляет запись в бд и дописывает фио и группу опционально)"""
     try:
-        user = await UserDAO.update(session=session, filters=IdModel(id=user.id), values=user_info)
-        if not user:
+        is_registered = bool(user.get("full_name", "").strip())
+        if is_registered:
+            raise UserAlreadyExistsException
+
+        update_status = await UserDAO.update(session=session, filters=IdModel(id=user.get("id")), values=user_info)
+        if update_status != 1:
             raise UserNotFoundException
 
-        user_key = f"user_info:{user.id}"
+        user_key = f"user_info:{user.get("telegram_id")}"
+
         await redis.hset(user_key, mapping={
-            **user,
-            "full_name": user.full_name,
-            "is_student_mirea": str(user.is_student_mirea),
-            "group": user.group
+            "full_name": user_info.full_name,
+            "is_mirea_student": str(user_info.is_mirea_student),
+            "group": user_info.group or ""
         })
         await redis.expire(user_key, 3600)
 
-        await make_user_active(user.id)
+        return SuccessResponse(message="Пользователь успешно зарегистрирован")
 
-        return {"message": "Пользователь успешно зарегистрирован"}
 
     except Exception as e:
         logger.error(f"Ошибка при регистрации пользователя на хакатон: {e}")
@@ -55,11 +53,14 @@ async def register_user(user_info: UserInfoUpdate,
 @exception_handler
 async def check_registration(user: SUser = Depends(fast_auth_user)) -> SUserCheckRegistration:
     """Проверяет зарегистрирован ли пользователь в приложении"""
-    if user:
-        status = True
-    else:
-        status = False
-    return SUserCheckRegistration(is_user_registered_for_hackathon=status)
+    try:
+        is_registered = bool(user.get("full_name", "").strip())
+
+        return SUserCheckRegistration(is_registered=is_registered)
+    except Exception as e:
+        logger.error(f"Ошибка при проверке регистрации пользователя: {e}")
+        raise
+
 
 
 @router.get("/my_profile", response_model=Union[ProfileInfo, ErrorResponse],
@@ -78,18 +79,10 @@ async def get_my_profile(session: AsyncSession = Depends(db.get_db),
             last_name=user.get('last_name')
         )
 
-        team_info = STeam(
-            id=team.id,
-            name=team.name,
-            is_open=team.is_open,
-            description=team.description,
-            hackathon_id=team.hackathon_id
-        ) if team else None
-
-        if user.get('last_active') is not None:
-            await make_user_active(user_id=str(user.get('telegram_id')))
+        team_info = STeam(**team.to_dict()) if team else None
 
         return ProfileInfo(user=user_info, team=team_info)
+
     except Exception as e:
         logger.error(f"Ошибка при получении профиля пользователя: {e}")
         raise

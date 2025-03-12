@@ -52,6 +52,7 @@ class TeamDAO(BaseDAO[Team]):
             logger.error(f"Ошибка при поиске команд для hackathon_id {hackathon_id}: {e}")
             raise
 
+
     @classmethod
     async def find_team_with_members_by_user_id(cls, session: AsyncSession, user_id: int) -> Team | None:
         """
@@ -88,9 +89,39 @@ class MemberDAO(BaseDAO[Member]):
 
     @classmethod
     async def find_all_by_team_id(cls, team_id: int, session: AsyncSession) -> List[Member]:
-        query = select(cls.model).where(cls.model.team_id == team_id)
-        result = await session.execute(query)
-        return result.scalars().all()
+        try:
+            logger.info(f"Поиск всех участников для team_id: {team_id}")
+            query = select(cls.model).where(cls.model.team_id == team_id)
+            result = await session.execute(query)
+            members = result.scalars().all()
+            logger.info(f"Найдено {len(members)} участников для team_id: {team_id}")
+            return members
+        except SQLAlchemyError as e:
+            logger.error(f"Ошибка при поиске участников для team_id {team_id}: {e}")
+            raise
+
+
+    @classmethod
+    async def find_existing_member(cls, session: AsyncSession, user_id: int, hackathon_id: int):
+        try:
+            logger.info(f"Поиск существующего участника с user_id: {user_id} и hackathon_id: {hackathon_id}")
+            result = await session.execute(
+                select(cls.model)
+                .join(Team, Member.team_id == Team.id)
+                .where(cls.model.user_id == user_id, Team.hackathon_id == hackathon_id)
+            )
+            member = result.scalars().first()
+            if member:
+                logger.info(f"Найден участник с user_id: {user_id} и hackathon_id: {hackathon_id}")
+            else:
+                logger.info(f"Участник с user_id: {user_id} и hackathon_id: {hackathon_id} не найден")
+            return member
+        except SQLAlchemyError as e:
+            logger.error(f"Ошибка при поиске участника с user_id {user_id} и hackathon_id {hackathon_id}: {e}")
+            raise
+
+
+
 
 
 class InviteDAO(BaseDAO[Invite]):

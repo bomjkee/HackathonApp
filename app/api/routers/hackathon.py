@@ -1,17 +1,16 @@
 import json
 from fastapi import APIRouter, Depends
-from pydantic_core import ErrorTypeInfo
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Union
 
 from config import redis, logger
-from app.db.dao import HackathonDAO, UserDAO
+from app.db.dao import HackathonDAO
 from app.db.session_maker import db
 from app.api.utils.auth_dep import fast_auth_user
 from app.api.utils.api_utils import exception_handler
-from app.api.utils.redis_operations import convert_redis_data, redis_data
+from app.api.utils.redis_operations import convert_redis_data
 from app.api.typization.responses import SHackathonInfo, SHackathons, SUser, ErrorResponse
-from app.api.typization.schemas import IdModel, UserInfoUpdate
+from app.api.typization.schemas import IdModel
 from app.api.typization.exceptions import HackathonNotFoundException, HackathonsNotFoundException, UserNotFoundException
 
 

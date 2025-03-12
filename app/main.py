@@ -51,7 +51,7 @@ async def lifespan(app: FastAPI):
     logger.info("Бот завершает работу")
 
 
-app = FastAPI()
+app = FastAPI(lifespan=lifespan)
 
 origins = [
     "http://localhost:5173",

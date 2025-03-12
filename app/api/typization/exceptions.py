@@ -58,6 +58,12 @@ TeamNameAlreadyExistsException = HTTPException(
     detail="Команда с таким именем уже существует"
 )
 
+# Команда у данного пользователя существует
+TeamAlreadyExistsException = HTTPException(
+    status_code=status.HTTP_409_CONFLICT,
+    detail="У вас уже есть команда"
+)
+
 
 # Не найден ID команды
 NoTeamIdException = HTTPException(

@@ -10,8 +10,8 @@ class SUser(BaseModel):
     first_name: str | None = Field(None, description="Имя tg пользователя")
     last_name: str | None = Field(None, description="Фамилия tg пользователя")
 
-    full_name: str | None = Field(..., description="ФИО пользователя")
-    is_student_mirea: bool | None = Field(..., description="Является ли пользователь студентом МИРЭА")
+    full_name: str | None = Field(None, description="ФИО пользователя")
+    is_mirea_student: bool | None = Field(None, description="Является ли пользователь студентом МИРЭА")
     group: str | None = Field(None, description="Учебная группа пользователя")
 
     last_active: int | None = Field(None, description="Время последней активности пользователя")
@@ -74,11 +74,13 @@ class SInvite(BaseModel):
 class SUserCheckRegistration(BaseModel):
     is_registered: bool = Field(False, description="Зарегистрирован ли пользователь в MiniApp")
 
+class SuccessResponse(BaseModel):
+    status: str = Field("Success", description="Статус ответа")
+    message: str = Field(..., description="Сообщение")
 
 class Error(BaseModel):
-    error: str
-
+    error: str = Field(..., description="Ошибка")
 
 class ErrorResponse(BaseModel):
-    status: str
-    data: Error
+    status: str = Field(..., description="Статус ответа")
+    data: Error = Field(..., description="Данные об ошибке")

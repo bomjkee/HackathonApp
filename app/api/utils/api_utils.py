@@ -9,7 +9,7 @@ from datetime import timedelta
 from urllib.parse import unquote
 from typing import Dict, Union
 from fastapi.requests import Request
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 
 from app.api.typization.schemas import TelegramIDModel
 from app.api.typization.exceptions import AuthException
@@ -85,8 +85,14 @@ def exception_handler(f):
     async def decorated_function(*args, **kwargs):
         try:
             return await f(*args, **kwargs)
+        except HTTPException as e:
+            logger.warning(f"HTTPException in function: {f.__name__} with args: {args} and\n"
+                         f"kwargs: {kwargs}\n  - {e.detail} (status_code: {e.status_code})")
+            raise
         except Exception as e:
-            logger.error(f"Error in function: {f.__name__} with args: {args} and\n"
+            logger.error(f"Unexpected Error in function: {f.__name__} with args: {args} and\n"
                          f"kwargs: {kwargs}\n  - {e}")
-            raise HTTPException(status_code=404, detail={"result": "Error", "data": "Logs"})
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                detail={"result": "Error", "data": "Internal Server Error"})
     return decorated_function
+
