@@ -1,10 +1,11 @@
 import json
 import httpx
 import pytest
+import pytest_asyncio
 from httpx import AsyncClient, ASGITransport, Response
 
 from app.main import app
-from config import settings, logger
+from config import settings, logger, redis
 
 
 async def make_request(client: AsyncClient, api_url: str, headers: dict | None = None, method: str = 'GET',
@@ -33,13 +34,15 @@ async def make_request(client: AsyncClient, api_url: str, headers: dict | None =
                     f"\nМетод: {method}"
                     f"\nСтатус: {response.status_code}"
                     f"\nТело ответа: {json.dumps(response.json(), indent=4, ensure_ascii=False)}")
+        return response
+
     except httpx.RequestError as e:
         logger.error(f"Ошибка во время запроса: {e}")
-        return None
+        raise
 
 
 
-@pytest.fixture(scope="session")
+@pytest_asyncio.fixture(scope="function")
 async def async_client():
     async with AsyncClient(
             base_url="http://testserver",
@@ -56,5 +59,10 @@ def authorization_headers():
     return {
         "authorization": f"tma {settings.TMA}"
     }
+
+@pytest.mark.asyncio
+async def test_clear_redis():
+    logger.info("Сброс кеша в Redis")
+    await redis.flushall()
 
 

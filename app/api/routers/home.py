@@ -12,7 +12,7 @@ from app.api.typization.responses import SUser, ErrorResponse, SUserInfo, STeam,
 from app.db.session_maker import db
 from config import redis
 
-router = APIRouter(prefix="Работа с пользователем и Telegram")
+router = APIRouter(tags=["Работа с пользователем и Telegram"])
 
 
 @router.post("/register", response_model=Union[SuccessResponse, ErrorResponse],
@@ -23,7 +23,7 @@ async def register_user(user_info: UserInfoUpdate,
                         user: SUser = Depends(fast_auth_user)) -> SuccessResponse:
     """Регистрирует пользователя (обновляет запись в бд и дописывает фио и группу опционально)"""
     try:
-        is_registered = bool(user.get("full_name", "").strip())
+        is_registered = bool(user.get("full_name") not in ["", " ", "<null>"])
         if is_registered:
             raise UserAlreadyExistsException
 
@@ -54,7 +54,7 @@ async def register_user(user_info: UserInfoUpdate,
 async def check_registration(user: SUser = Depends(fast_auth_user)) -> SUserCheckRegistration:
     """Проверяет зарегистрирован ли пользователь в приложении"""
     try:
-        is_registered = bool(user.get("full_name", "").strip())
+        is_registered = bool(user.get("full_name") not in ["", "<null>"])
 
         return SUserCheckRegistration(is_registered=is_registered)
     except Exception as e:

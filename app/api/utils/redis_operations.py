@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.typization.exceptions import HackathonNotFoundException, TeamNotFoundException, InvitationNotFoundException
 from app.api.typization.responses import SUser, SHackathonInfo, STeam, SInvite
-from app.db.dao import UserDAO, MemberDAO, HackathonDAO, InviteDAO
+from app.db.dao import UserDAO, MemberDAO, HackathonDAO, InviteDAO, TeamDAO
 from app.api.typization.schemas import TelegramIDModel, IdModel
 from app.db.session_maker import db, DatabaseSession
 from config import redis
@@ -24,7 +24,7 @@ async def redis_data(tg_id: int) -> SUser | None:
         if not user_data:
             async for session in DatabaseSession.get_db():
 
-                user = await UserDAO.find_one_or_none(session=session, filters=TelegramIDModel(telegram_id=user_id))
+                user = await UserDAO.find_one_or_none(session=session, filters=TelegramIDModel(telegram_id=tg_id))
                 logger.info(f"Пользователь из базы данных")
 
                 if user is None:
@@ -108,6 +108,9 @@ async def get_hackathon_by_id_from_redis(session: AsyncSession, hackathon_id: in
 
         hackathon = SHackathonInfo(**hackathon_row.to_dict())
 
+        await redis.set(hackathon_cache_key, json.dumps(hackathon.model_dump()))
+        await redis.expire(hackathon_cache_key, 3600)
+
     return hackathon
 
 
@@ -116,12 +119,12 @@ async def get_team_by_id_from_redis(session: AsyncSession, team_id: int) -> STea
     cached_team_data = await redis.get(team_cache_key)
 
     if cached_team_data:
-        team_data = json.loads(cached_team_data)
+        team_data = json.loads(cached_team_data["team"])
         logger.info(f"Команда из Redis: {team_data}")
 
         team = STeam(**convert_redis_data(team_data))
     else:
-        team_row = await HackathonDAO.find_one_or_none(session=session, filters=IdModel(id=team_id))
+        team_row = await TeamDAO.find_one_or_none(session=session, filters=IdModel(id=team_id))
         if team_row is None:
             raise TeamNotFoundException
 
@@ -145,5 +148,8 @@ async def get_invite_by_id_from_redis(session: AsyncSession, invite_id: int) -> 
             raise InvitationNotFoundException
 
         invite = SInvite(**invite_row.to_dict())
+
+        await redis.set(invite_cache_key, json.dumps(invite.model_dump()))
+        await redis.expire(invite_cache_key, 3600)
 
     return invite

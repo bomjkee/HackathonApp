@@ -56,15 +56,10 @@ class MemberCreate(BaseModel):
     role: str = Field("member", description="Роль участника")
 
 
-class MemberLeaderFind(BaseModel):
-    user_id: int = Field(..., description="ID пользователя")
-    team_id: int = Field(..., description="ID команды")
-    role: str = Field("leader", description="Роль участника")
-
-
 class MemberFind(BaseModel):
     user_id: int | None= Field(None, description="ID пользователя")
     team_id: int = Field(..., description="ID команды")
+    role: str | None = Field(None, description="Роль участника")
     hackathon_id: int | None = Field(None, description="ID хакатона")
 
 

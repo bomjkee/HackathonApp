@@ -1,7 +1,7 @@
 import pytest
 from httpx import AsyncClient, Response
 
-from tests.test_main import make_request
+from tests.conftest import make_request
 
 
 # POST запросы
@@ -16,7 +16,7 @@ async def test_register_user(async_client: AsyncClient, authorization_headers: d
                                             method="POST", headers=authorization_headers,
                                   data=user_update)
     assert response.status_code == 200
-    assert response.json()["result"] == "Success"
+    assert response.json()["status"] == "Success"
 
 
 
@@ -25,7 +25,8 @@ async def test_register_user(async_client: AsyncClient, authorization_headers: d
 async def test_get_my_profile(async_client: AsyncClient, authorization_headers: dict):
     response: Response = await make_request(client=async_client, api_url="/my_profile", headers=authorization_headers)
     assert response.status_code == 200
-    assert response.json()["result"] == "Success"
+    assert response.json()["user"]
+    assert response.json()["team"]
 
 
 @pytest.mark.asyncio

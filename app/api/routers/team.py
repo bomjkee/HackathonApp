@@ -1,4 +1,5 @@
 import json
+from pyexpat.errors import messages
 from typing import Union, List
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -11,7 +12,7 @@ from app.api.utils.redis_operations import convert_redis_data, get_hackathon_by_
 from app.db.session_maker import db
 from app.bot.keyboards.user_keyboards import invite_keyboard
 from app.api.typization.schemas import (IdModel, NameModel, TeamCreate,
-                                        InviteCreate, MemberCreate, MemberLeaderFind,
+                                        InviteCreate, MemberCreate,
                                         TeamUpdate, MemberFind)
 from app.api.typization.responses import (STeam, SMember, SUser,
                                           ErrorResponse, STeamWithMembers,
@@ -45,6 +46,7 @@ async def get_all_teams(session: AsyncSession = Depends(db.get_db)) -> List[STea
                 raise TeamsNotFoundException
 
             teams_data = [team.to_dict() for team in teams]
+
             await redis.set(cache_key, json.dumps(teams_data))
             await redis.expire(cache_key, 3600)
 
@@ -83,9 +85,7 @@ async def get_team_by_id(team_id: int, session: AsyncSession = Depends(db.get_db
                 members_team = []
 
             team = STeam(**team_data.to_dict())
-
             members = [SMember(**member.to_dict()) for member in members_team]
-
             team_with_members = STeamWithMembers(team=team, members=members)
 
             await redis.set(team_cache_key, json.dumps(
@@ -99,12 +99,12 @@ async def get_team_by_id(team_id: int, session: AsyncSession = Depends(db.get_db
         raise
 
 
-@router.post("/", response_model=Union[STeam, ErrorResponse],
+@router.post("/", response_model=Union[SuccessResponse, ErrorResponse],
              responses={400: {"model": ErrorResponse}})
 @exception_handler
 async def create_team(team: TeamCreate,
                       session: AsyncSession = Depends(db.get_db_with_commit),
-                      user: SUser = Depends(fast_auth_user)) -> STeam:
+                      user: SUser = Depends(fast_auth_user)) -> SuccessResponse:
     """Создает новую команду и очищает кэш списка команд."""
 
     try:
@@ -127,7 +127,7 @@ async def create_team(team: TeamCreate,
         team_list_cache_key = "all_teams"
         await redis.delete(team_list_cache_key)
 
-        return new_team
+        return SuccessResponse(message="Команда была успешно создана")
 
     except Exception as e:
         logger.error(f"Ошибка при создании команды: {e}")
@@ -143,23 +143,22 @@ async def update_team(team_id: int, team: TeamUpdate,
     """Обновляет информацию о команде и очищает кэш команды и списка команд."""
 
     try:
-        existing_team = await TeamDAO.find_one_or_none(session=session, filters=IdModel(id=team_id))
-        if not existing_team:
-            raise TeamNotFoundException
+        existing_team = await get_team_by_id_from_redis(session=session, team_id=team_id)
 
-        leader = await MemberDAO.find_one_or_none(session=session, filters=MemberLeaderFind(team_id=team_id,
-                                                                                            user_id=user.get("id")))
+        leader = await MemberDAO.find_one_or_none(session=session, filters=MemberFind(team_id=existing_team.id,
+                                                                                      user_id=user.get("id"),
+                                                                                      role="leader"))
         if not leader:
             raise ForbiddenException
 
-        updated_team_count = await TeamDAO.update(session=session, filters=IdModel(id=team_id), values=team)
+        updated_team_count = await TeamDAO.update(session=session, filters=IdModel(id=existing_team.id), values=team)
         if updated_team_count != 1:
             raise TeamNotFoundException
 
         team_list_cache_key = f"all_teams"
         await redis.delete(team_list_cache_key)
 
-        team_cache_key = f"team:{team_id}"
+        team_cache_key = f"team:{existing_team.id}"
         await redis.delete(team_cache_key)
 
         return SuccessResponse(message="Команда успешно обновлена")
@@ -177,22 +176,23 @@ async def delete_team(team_id: int, session: AsyncSession = Depends(db.get_db_wi
     """Удаляет команду и очищает кэш команды и списка команд."""
 
     try:
-        team = await get_team_by_id_from_redis(session=session, team_id=team_id)
+        existing_team = await get_team_by_id_from_redis(session=session, team_id=team_id)
 
-        leader = await MemberDAO.find_one_or_none(session=session, filters=MemberLeaderFind(team_id=team_id,
-                                                                                            user_id=user.get("id")))
+        leader = await MemberDAO.find_one_or_none(session=session, filters=MemberFind(team_id=existing_team.id,
+                                                                                      user_id=user.get("id"),
+                                                                                      role="leader"))
         if not leader:
             raise ForbiddenException
 
-        members = await MemberDAO.find_all_by_team_id(session=session, team_id=team_id)
+        members = await MemberDAO.find_all_by_team_id(session=session, team_id=existing_team.id)
         if len(members) > 1:
             raise ForbiddenException
-        await TeamDAO.delete(session=session, filters=IdModel(id=team_id))
+        await TeamDAO.delete(session=session, filters=IdModel(id=existing_team.id))
 
         team_list_cache_key = f"all_teams"
         await redis.delete(team_list_cache_key)
 
-        team_cache_key = f"team:{team_id}"
+        team_cache_key = f"team:{existing_team.id}"
         await redis.delete(team_cache_key)
 
         return SuccessResponse(message="Команда успешно удалена")
@@ -216,8 +216,9 @@ async def invite_user_to_team(invite: InviteCreate,
 
         team = await get_team_by_id_from_redis(session=session, team_id=invite.team_id)
 
-        leader = await MemberDAO.find_one_or_none(session=session, filters=MemberLeaderFind(team_id=invite.team_id,
-                                                                                            user_id=user.get("id")))
+        leader = await MemberDAO.find_one_or_none(session=session, filters=MemberFind(team_id=invite.team_id,
+                                                                                      user_id=user.get("id"),
+                                                                                      role="leader"))
         if not leader:
             raise ForbiddenException
 
@@ -254,7 +255,17 @@ async def invite_user_to_team(invite: InviteCreate,
 @exception_handler
 async def join_to_team(team_id: int, session: AsyncSession = Depends(db.get_db_with_commit),
                        user: SUser = Depends(fast_auth_user)) -> SuccessResponse:
-    pass
+    try:
+        current_team = await get_team_by_id_from_redis(session=session, team_id=team_id)
+
+        team_cache_key = f"team:{current_team.id}"
+        await redis.delete(team_cache_key)
+
+        return SuccessResponse(message="Вы успешно присоединились к команде")
+    except Exception as e:
+        logger.error(f"Ошибка при выходе из команды: {e}")
+        raise
+
 
 
 @router.delete("/{team_id}/leave", response_model=SuccessResponse,
@@ -264,21 +275,21 @@ async def leave_team(team_id: int, session: AsyncSession = Depends(db.get_db_wit
                      user: SUser = Depends(fast_auth_user)) -> SuccessResponse:
     """Пользователь покидает команду."""
     try:
+        current_team = await get_team_by_id_from_redis(session=session, team_id=team_id)
+
         member = await MemberDAO.find_one_or_none(session=session,
-                                                  filters=MemberFind(team_id=team_id, user_id=user.get("id")))
+                                                  filters=MemberFind(team_id=current_team.id, user_id=user.get("id")))
         if not member:
             raise MemberNotFoundException
 
-        leader = await MemberDAO.find_one_or_none(session=session, filters=MemberLeaderFind(team_id=invite.team_id,
-                                                                                            user_id=user.get("id")))
         message = "Вы успешно покинули команду"
-        if leader:
+        if member.role == "leader":
             message += " и удалили ее"
-            await TeamDAO.delete(session=session, filters=IdModel(id=team_id))
+            await TeamDAO.delete(session=session, filters=IdModel(id=current_team.id))
 
         await MemberDAO.delete(session=session, filters=IdModel(id=member.id))
 
-        team_cache_key = f"team:{team_id}"
+        team_cache_key = f"team:{current_team.id}"
         await redis.delete(team_cache_key)
 
         return SuccessResponse(message=message)

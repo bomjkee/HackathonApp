@@ -8,8 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.typization.exceptions import TeamNotFoundException, InvitationNotFoundException, \
     MaxTeamMembersExceededException, ForbiddenException, UserNotRegisteredForHackathon, HackathonNotFoundException
 from app.api.typization.responses import SMember, SInvite, STeam, SHackathonInfo
-from app.api.typization.schemas import TelegramIDModel, UserInfoFromBot, IdModel, InviteFilter, MemberLeaderFind, \
-    MemberFind
+from app.api.typization.schemas import TelegramIDModel, UserInfoFromBot, IdModel, InviteFilter, MemberFind
 from app.api.utils.redis_operations import convert_redis_data, get_hackathon_by_id_from_redis, \
     get_team_by_id_from_redis, get_invite_by_id_from_redis
 from app.bot.keyboards.user_keyboards import main_keyboard, back_keyboard, invite_keyboard
@@ -62,7 +61,7 @@ async def accept_invite(call: CallbackQuery, session_with_commit: AsyncSession) 
 
         await call.message.edit_text("Приглашение принято успешно")
 
-        leader = await MemberDAO.find_one_or_none(session=session_with_commit, filters=MemberLeaderFind(team_id=team.id, user_id=user_id))
+        leader = await MemberDAO.find_one_or_none(session=session_with_commit, filters=MemberFind(team_id=team.id, user_id=user_id, role="leader"))
         if leader:
             leader_user = await UserDAO.find_one_or_none(session=session_with_commit, filters=IdModel(id=user_id))
             if leader_user:

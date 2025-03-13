@@ -33,6 +33,7 @@ class Settings(BaseSettings):
     REDIS_USER_PASSWORD: str
 
     TMA: str
+
     model_config = SettingsConfigDict(
         env_file=os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
     )

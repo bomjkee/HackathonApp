@@ -13494,3 +13494,1736 @@ URL: https://0c39-185-234-67-249.ngrok-free.app/teams
 2025-03-12 at 17:02 | INFO | Вебхук удален
 2025-03-12 at 17:02 | INFO | Бот успешно остановлен.
 2025-03-12 at 17:02 | INFO | Бот завершает работу
+2025-03-13 at 03:12 | INFO | Поиск всех записей Hackathon по фильтрам: {}
+2025-03-13 at 03:12 | INFO | Найдено 5 записей.
+2025-03-13 at 03:12 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/hackathons
+Метод: GET
+Статус: 200
+Тело ответа: [
+    {
+        "id": 1,
+        "name": "Хакатон МИРЭА 2025",
+        "start_description": "Раскройте свой кодерский потенциал на Хакатоне МИРЭА!"
+    },
+    {
+        "id": 2,
+        "name": "Кодфест Глобал",
+        "start_description": "Глобальный хакатон, объединяющий разработчиков со всего мира."
+    },
+    {
+        "id": 3,
+        "name": "DataDive Аналитика",
+        "start_description": "Погрузитесь в данные и откройте ценные идеи."
+    },
+    {
+        "id": 4,
+        "name": "WebDev Инновации",
+        "start_description": "Расширьте границы веб-разработки."
+    },
+    {
+        "id": 5,
+        "name": "CyberSec Вызов",
+        "start_description": "Проверьте свои навыки кибербезопасности в смоделированной среде."
+    }
+]
+2025-03-13 at 03:12 | ERROR | Ошибка при получении информации о хакатоне: unable to perform operation on <TCPTransport closed=True reading=False 0x10f9138a0>; the handler is closed
+2025-03-13 at 03:12 | ERROR | Unexpected Error in function: get_hackathon_by_id with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10fae6660>, 'hackathon_id': 1}
+  - unable to perform operation on <TCPTransport closed=True reading=False 0x10f9138a0>; the handler is closed
+2025-03-13 at 03:12 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/hackathons/1
+Метод: GET
+Статус: 500
+Тело ответа: {
+    "detail": {
+        "result": "Error",
+        "data": "Internal Server Error"
+    }
+}
+2025-03-13 at 03:12 | INFO | True | True
+2025-03-13 at 03:12 | ERROR | Ошибка при получении пользователя: name 'user_id' is not defined
+2025-03-13 at 03:12 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:12 | ERROR | Ошибка при регистрации пользователя на хакатон: 'NoneType' object has no attribute 'get'
+2025-03-13 at 03:12 | ERROR | Unexpected Error in function: register_user with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10fae6b40>, 'user': None, 'user_info': UserInfoUpdate(full_name='Смирнов Егор Андреевич', is_mirea_student=True, group='ВВВВ-81-23')}
+  - 'NoneType' object has no attribute 'get'
+2025-03-13 at 03:12 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/register
+Метод: POST
+Статус: 500
+Тело ответа: {
+    "detail": {
+        "result": "Error",
+        "data": "Internal Server Error"
+    }
+}
+2025-03-13 at 03:12 | INFO | True | True
+2025-03-13 at 03:12 | ERROR | Ошибка при получении пользователя: unable to perform operation on <TCPTransport closed=True reading=False 0x10f91b8b0>; the handler is closed
+2025-03-13 at 03:12 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:12 | ERROR | Ошибка при получении профиля пользователя: 'NoneType' object has no attribute 'get'
+2025-03-13 at 03:12 | ERROR | Unexpected Error in function: get_my_profile with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10fae6ed0>, 'user': None}
+  - 'NoneType' object has no attribute 'get'
+2025-03-13 at 03:12 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/my_profile
+Метод: GET
+Статус: 500
+Тело ответа: {
+    "detail": {
+        "result": "Error",
+        "data": "Internal Server Error"
+    }
+}
+2025-03-13 at 03:12 | INFO | True | True
+2025-03-13 at 03:12 | ERROR | Ошибка при получении пользователя: name 'user_id' is not defined
+2025-03-13 at 03:12 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:12 | ERROR | Ошибка при проверке регистрации пользователя: 'NoneType' object has no attribute 'get'
+2025-03-13 at 03:12 | ERROR | Unexpected Error in function: check_registration with args: () and
+kwargs: {'user': None}
+  - 'NoneType' object has no attribute 'get'
+2025-03-13 at 03:12 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/register
+Метод: GET
+Статус: 500
+Тело ответа: {
+    "detail": {
+        "result": "Error",
+        "data": "Internal Server Error"
+    }
+}
+2025-03-13 at 03:12 | ERROR | Error interacting with Redis: unable to perform operation on <TCPTransport closed=True reading=False 0x10f91e310>; the handler is closed
+2025-03-13 at 03:12 | ERROR | Unexpected Error in function: get_all_teams with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10fb4e810>}
+  - unable to perform operation on <TCPTransport closed=True reading=False 0x10f91e310>; the handler is closed
+2025-03-13 at 03:12 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams
+Метод: GET
+Статус: 500
+Тело ответа: {
+    "detail": {
+        "result": "Error",
+        "data": "Internal Server Error"
+    }
+}
+2025-03-13 at 03:12 | INFO | Поиск одной записи Team по фильтрам: {'id': 1}
+2025-03-13 at 03:12 | ERROR | Ошибка при получении информации о команде: unable to perform operation on <TCPTransport closed=True reading=False 0x10f91adc0>; the handler is closed
+2025-03-13 at 03:12 | ERROR | Unexpected Error in function: get_team_by_id with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10fb4fe90>, 'team_id': 1}
+  - unable to perform operation on <TCPTransport closed=True reading=False 0x10f91adc0>; the handler is closed
+2025-03-13 at 03:12 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams/1
+Метод: GET
+Статус: 500
+Тело ответа: {
+    "detail": {
+        "result": "Error",
+        "data": "Internal Server Error"
+    }
+}
+2025-03-13 at 03:12 | INFO | True | True
+2025-03-13 at 03:12 | ERROR | Ошибка при получении пользователя: unable to perform operation on <TCPTransport closed=True reading=False 0x10d7b7d10>; the handler is closed
+2025-03-13 at 03:12 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:12 | INFO | Поиск одной записи Team по фильтрам: {'name': 'Olso'}
+2025-03-13 at 03:12 | ERROR | Ошибка при поиске записи по фильтрам {'name': 'Olso'}: (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT teams.name, teams.is_open, teams.description, teams.hackathon_id, teams.id, teams.created_at, teams.updated_at 
+FROM teams 
+WHERE teams.name = $1::VARCHAR]
+[parameters: ('Olso',)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:12 | ERROR | Ошибка при создании команды: (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT teams.name, teams.is_open, teams.description, teams.hackathon_id, teams.id, teams.created_at, teams.updated_at 
+FROM teams 
+WHERE teams.name = $1::VARCHAR]
+[parameters: ('Olso',)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:12 | ERROR | Unexpected Error in function: create_team with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10fa016d0>, 'user': None, 'team': TeamCreate(name='Olso', is_open=True, description='Команда разработчиков корпоративных приложений', hackathon_id=2)}
+  - (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT teams.name, teams.is_open, teams.description, teams.hackathon_id, teams.id, teams.created_at, teams.updated_at 
+FROM teams 
+WHERE teams.name = $1::VARCHAR]
+[parameters: ('Olso',)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:12 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams
+Метод: POST
+Статус: 500
+Тело ответа: {
+    "detail": {
+        "result": "Error",
+        "data": "Internal Server Error"
+    }
+}
+2025-03-13 at 03:12 | INFO | True | True
+2025-03-13 at 03:12 | ERROR | Ошибка при получении пользователя: name 'user_id' is not defined
+2025-03-13 at 03:12 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:12 | INFO | Поиск одной записи Invite по фильтрам: {'invite_user_id': 741185494, 'team_id': 1}
+2025-03-13 at 03:12 | ERROR | Ошибка при поиске записи по фильтрам {'invite_user_id': 741185494, 'team_id': 1}: (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT invites.team_id, invites.invite_user_id, invites.id, invites.created_at, invites.updated_at 
+FROM invites 
+WHERE invites.invite_user_id = $1::INTEGER AND invites.team_id = $2::INTEGER]
+[parameters: (741185494, 1)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:12 | ERROR | Ошибка при приглашении пользователя в команду: (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT invites.team_id, invites.invite_user_id, invites.id, invites.created_at, invites.updated_at 
+FROM invites 
+WHERE invites.invite_user_id = $1::INTEGER AND invites.team_id = $2::INTEGER]
+[parameters: (741185494, 1)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:12 | ERROR | Unexpected Error in function: invite_user_to_team with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10fb4f890>, 'user': None, 'invite': InviteCreate(invite_user_id=741185494, team_id=1)}
+  - (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT invites.team_id, invites.invite_user_id, invites.id, invites.created_at, invites.updated_at 
+FROM invites 
+WHERE invites.invite_user_id = $1::INTEGER AND invites.team_id = $2::INTEGER]
+[parameters: (741185494, 1)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:12 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams/invite
+Метод: POST
+Статус: 500
+Тело ответа: {
+    "detail": {
+        "result": "Error",
+        "data": "Internal Server Error"
+    }
+}
+2025-03-13 at 03:12 | INFO | True | True
+2025-03-13 at 03:12 | ERROR | Ошибка при получении пользователя: unable to perform operation on <TCPTransport closed=True reading=False 0x10f91b8b0>; the handler is closed
+2025-03-13 at 03:12 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:12 | INFO | Поиск одной записи Hackathon по фильтрам: {'id': 2}
+2025-03-13 at 03:12 | ERROR | Ошибка при поиске записи по фильтрам {'id': 2}: (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT hackathons.name, hackathons.start_description, hackathons.description, hackathons.max_members, hackathons.start_date, hackathons.end_date, hackathons.id, hackathons.created_at, hackathons.updated_at 
+FROM hackathons 
+WHERE hackathons.id = $1::INTEGER]
+[parameters: (2,)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:12 | ERROR | Ошибка при обновлении команды: (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT hackathons.name, hackathons.start_description, hackathons.description, hackathons.max_members, hackathons.start_date, hackathons.end_date, hackathons.id, hackathons.created_at, hackathons.updated_at 
+FROM hackathons 
+WHERE hackathons.id = $1::INTEGER]
+[parameters: (2,)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:12 | ERROR | Unexpected Error in function: update_team with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10fb78170>, 'user': None, 'team_id': 2, 'team': TeamUpdate(name='Olso', is_open=False, description='Команда разработчиков корпоративных приложений')}
+  - (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT hackathons.name, hackathons.start_description, hackathons.description, hackathons.max_members, hackathons.start_date, hackathons.end_date, hackathons.id, hackathons.created_at, hackathons.updated_at 
+FROM hackathons 
+WHERE hackathons.id = $1::INTEGER]
+[parameters: (2,)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:12 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams/2
+Метод: PUT
+Статус: 500
+Тело ответа: {
+    "detail": {
+        "result": "Error",
+        "data": "Internal Server Error"
+    }
+}
+2025-03-13 at 03:12 | INFO | True | True
+2025-03-13 at 03:12 | ERROR | Ошибка при получении пользователя: unable to perform operation on <TCPTransport closed=True reading=False 0x10f9138a0>; the handler is closed
+2025-03-13 at 03:12 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:12 | INFO | Поиск одной записи Hackathon по фильтрам: {'id': 17}
+2025-03-13 at 03:12 | ERROR | Ошибка при поиске записи по фильтрам {'id': 17}: (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT hackathons.name, hackathons.start_description, hackathons.description, hackathons.max_members, hackathons.start_date, hackathons.end_date, hackathons.id, hackathons.created_at, hackathons.updated_at 
+FROM hackathons 
+WHERE hackathons.id = $1::INTEGER]
+[parameters: (17,)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:12 | ERROR | Ошибка при выходе из команды: (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT hackathons.name, hackathons.start_description, hackathons.description, hackathons.max_members, hackathons.start_date, hackathons.end_date, hackathons.id, hackathons.created_at, hackathons.updated_at 
+FROM hackathons 
+WHERE hackathons.id = $1::INTEGER]
+[parameters: (17,)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:12 | ERROR | Unexpected Error in function: leave_team with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10fba8290>, 'user': None, 'team_id': 17}
+  - (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT hackathons.name, hackathons.start_description, hackathons.description, hackathons.max_members, hackathons.start_date, hackathons.end_date, hackathons.id, hackathons.created_at, hackathons.updated_at 
+FROM hackathons 
+WHERE hackathons.id = $1::INTEGER]
+[parameters: (17,)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:12 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams/17/leave
+Метод: DELETE
+Статус: 500
+Тело ответа: {
+    "detail": {
+        "result": "Error",
+        "data": "Internal Server Error"
+    }
+}
+2025-03-13 at 03:12 | INFO | True | True
+2025-03-13 at 03:12 | ERROR | Ошибка при получении пользователя: unable to perform operation on <TCPTransport closed=True reading=False 0x10d7b8450>; the handler is closed
+2025-03-13 at 03:12 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:12 | INFO | Поиск одной записи Hackathon по фильтрам: {'id': 17}
+2025-03-13 at 03:12 | ERROR | Ошибка при поиске записи по фильтрам {'id': 17}: (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT hackathons.name, hackathons.start_description, hackathons.description, hackathons.max_members, hackathons.start_date, hackathons.end_date, hackathons.id, hackathons.created_at, hackathons.updated_at 
+FROM hackathons 
+WHERE hackathons.id = $1::INTEGER]
+[parameters: (17,)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:12 | ERROR | Ошибка при удалении команды: (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT hackathons.name, hackathons.start_description, hackathons.description, hackathons.max_members, hackathons.start_date, hackathons.end_date, hackathons.id, hackathons.created_at, hackathons.updated_at 
+FROM hackathons 
+WHERE hackathons.id = $1::INTEGER]
+[parameters: (17,)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:12 | ERROR | Unexpected Error in function: delete_team with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10fba89b0>, 'user': None, 'team_id': 17}
+  - (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT hackathons.name, hackathons.start_description, hackathons.description, hackathons.max_members, hackathons.start_date, hackathons.end_date, hackathons.id, hackathons.created_at, hackathons.updated_at 
+FROM hackathons 
+WHERE hackathons.id = $1::INTEGER]
+[parameters: (17,)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:12 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams/17
+Метод: DELETE
+Статус: 500
+Тело ответа: {
+    "detail": {
+        "result": "Error",
+        "data": "Internal Server Error"
+    }
+}
+2025-03-13 at 03:14 | INFO | Поиск всех записей Hackathon по фильтрам: {}
+2025-03-13 at 03:14 | INFO | Найдено 5 записей.
+2025-03-13 at 03:14 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/hackathons
+Метод: GET
+Статус: 200
+Тело ответа: [
+    {
+        "id": 1,
+        "name": "Хакатон МИРЭА 2025",
+        "start_description": "Раскройте свой кодерский потенциал на Хакатоне МИРЭА!"
+    },
+    {
+        "id": 2,
+        "name": "Кодфест Глобал",
+        "start_description": "Глобальный хакатон, объединяющий разработчиков со всего мира."
+    },
+    {
+        "id": 3,
+        "name": "DataDive Аналитика",
+        "start_description": "Погрузитесь в данные и откройте ценные идеи."
+    },
+    {
+        "id": 4,
+        "name": "WebDev Инновации",
+        "start_description": "Расширьте границы веб-разработки."
+    },
+    {
+        "id": 5,
+        "name": "CyberSec Вызов",
+        "start_description": "Проверьте свои навыки кибербезопасности в смоделированной среде."
+    }
+]
+2025-03-13 at 03:14 | ERROR | Ошибка при получении информации о хакатоне: unable to perform operation on <TCPTransport closed=True reading=False 0x140220f20>; the handler is closed
+2025-03-13 at 03:14 | ERROR | Unexpected Error in function: get_hackathon_by_id with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x108ca1850>, 'hackathon_id': 1}
+  - unable to perform operation on <TCPTransport closed=True reading=False 0x140220f20>; the handler is closed
+2025-03-13 at 03:14 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/hackathons/1
+Метод: GET
+Статус: 500
+Тело ответа: {
+    "detail": {
+        "result": "Error",
+        "data": "Internal Server Error"
+    }
+}
+2025-03-13 at 03:14 | INFO | True | True
+2025-03-13 at 03:14 | ERROR | Ошибка при получении пользователя: name 'user_id' is not defined
+2025-03-13 at 03:14 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:14 | ERROR | Ошибка при регистрации пользователя на хакатон: 'NoneType' object has no attribute 'get'
+2025-03-13 at 03:14 | ERROR | Unexpected Error in function: register_user with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x108ca3290>, 'user': None, 'user_info': UserInfoUpdate(full_name='Смирнов Егор Андреевич', is_mirea_student=True, group='ВВВВ-81-23')}
+  - 'NoneType' object has no attribute 'get'
+2025-03-13 at 03:14 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/register
+Метод: POST
+Статус: 500
+Тело ответа: {
+    "detail": {
+        "result": "Error",
+        "data": "Internal Server Error"
+    }
+}
+2025-03-13 at 03:14 | INFO | True | True
+2025-03-13 at 03:14 | ERROR | Ошибка при получении пользователя: unable to perform operation on <TCPTransport closed=True reading=False 0x140226a40>; the handler is closed
+2025-03-13 at 03:14 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:14 | ERROR | Ошибка при получении профиля пользователя: 'NoneType' object has no attribute 'get'
+2025-03-13 at 03:14 | ERROR | Unexpected Error in function: get_my_profile with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x108ca3a10>, 'user': None}
+  - 'NoneType' object has no attribute 'get'
+2025-03-13 at 03:14 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/my_profile
+Метод: GET
+Статус: 500
+Тело ответа: {
+    "detail": {
+        "result": "Error",
+        "data": "Internal Server Error"
+    }
+}
+2025-03-13 at 03:14 | INFO | True | True
+2025-03-13 at 03:14 | ERROR | Ошибка при получении пользователя: name 'user_id' is not defined
+2025-03-13 at 03:14 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:14 | ERROR | Ошибка при проверке регистрации пользователя: 'NoneType' object has no attribute 'get'
+2025-03-13 at 03:14 | ERROR | Unexpected Error in function: check_registration with args: () and
+kwargs: {'user': None}
+  - 'NoneType' object has no attribute 'get'
+2025-03-13 at 03:14 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/register
+Метод: GET
+Статус: 500
+Тело ответа: {
+    "detail": {
+        "result": "Error",
+        "data": "Internal Server Error"
+    }
+}
+2025-03-13 at 03:14 | ERROR | Error interacting with Redis: unable to perform operation on <TCPTransport closed=True reading=False 0x1448e5520>; the handler is closed
+2025-03-13 at 03:14 | ERROR | Unexpected Error in function: get_all_teams with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x108d0b860>}
+  - unable to perform operation on <TCPTransport closed=True reading=False 0x1448e5520>; the handler is closed
+2025-03-13 at 03:14 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams
+Метод: GET
+Статус: 500
+Тело ответа: {
+    "detail": {
+        "result": "Error",
+        "data": "Internal Server Error"
+    }
+}
+2025-03-13 at 03:14 | INFO | Поиск одной записи Team по фильтрам: {'id': 1}
+2025-03-13 at 03:14 | ERROR | Ошибка при получении информации о команде: unable to perform operation on <TCPTransport closed=True reading=False 0x140224f50>; the handler is closed
+2025-03-13 at 03:14 | ERROR | Unexpected Error in function: get_team_by_id with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x108d0baa0>, 'team_id': 1}
+  - unable to perform operation on <TCPTransport closed=True reading=False 0x140224f50>; the handler is closed
+2025-03-13 at 03:14 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams/1
+Метод: GET
+Статус: 500
+Тело ответа: {
+    "detail": {
+        "result": "Error",
+        "data": "Internal Server Error"
+    }
+}
+2025-03-13 at 03:14 | INFO | True | True
+2025-03-13 at 03:14 | ERROR | Ошибка при получении пользователя: unable to perform operation on <TCPTransport closed=True reading=False 0x1402261e0>; the handler is closed
+2025-03-13 at 03:14 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:14 | INFO | Поиск одной записи Team по фильтрам: {'name': 'Olso'}
+2025-03-13 at 03:14 | ERROR | Ошибка при поиске записи по фильтрам {'name': 'Olso'}: (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT teams.name, teams.is_open, teams.description, teams.hackathon_id, teams.id, teams.created_at, teams.updated_at 
+FROM teams 
+WHERE teams.name = $1::VARCHAR]
+[parameters: ('Olso',)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:14 | ERROR | Ошибка при создании команды: (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT teams.name, teams.is_open, teams.description, teams.hackathon_id, teams.id, teams.created_at, teams.updated_at 
+FROM teams 
+WHERE teams.name = $1::VARCHAR]
+[parameters: ('Olso',)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:14 | ERROR | Unexpected Error in function: create_team with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x108ca2030>, 'user': None, 'team': TeamCreate(name='Olso', is_open=True, description='Команда разработчиков корпоративных приложений', hackathon_id=2)}
+  - (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT teams.name, teams.is_open, teams.description, teams.hackathon_id, teams.id, teams.created_at, teams.updated_at 
+FROM teams 
+WHERE teams.name = $1::VARCHAR]
+[parameters: ('Olso',)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:14 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams
+Метод: POST
+Статус: 500
+Тело ответа: {
+    "detail": {
+        "result": "Error",
+        "data": "Internal Server Error"
+    }
+}
+2025-03-13 at 03:14 | INFO | True | True
+2025-03-13 at 03:14 | ERROR | Ошибка при получении пользователя: name 'user_id' is not defined
+2025-03-13 at 03:14 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:14 | INFO | Поиск одной записи Invite по фильтрам: {'invite_user_id': 741185494, 'team_id': 1}
+2025-03-13 at 03:14 | ERROR | Ошибка при поиске записи по фильтрам {'invite_user_id': 741185494, 'team_id': 1}: (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT invites.team_id, invites.invite_user_id, invites.id, invites.created_at, invites.updated_at 
+FROM invites 
+WHERE invites.invite_user_id = $1::INTEGER AND invites.team_id = $2::INTEGER]
+[parameters: (741185494, 1)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:14 | ERROR | Ошибка при приглашении пользователя в команду: (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT invites.team_id, invites.invite_user_id, invites.id, invites.created_at, invites.updated_at 
+FROM invites 
+WHERE invites.invite_user_id = $1::INTEGER AND invites.team_id = $2::INTEGER]
+[parameters: (741185494, 1)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:14 | ERROR | Unexpected Error in function: invite_user_to_team with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x108be5eb0>, 'user': None, 'invite': InviteCreate(invite_user_id=741185494, team_id=1)}
+  - (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT invites.team_id, invites.invite_user_id, invites.id, invites.created_at, invites.updated_at 
+FROM invites 
+WHERE invites.invite_user_id = $1::INTEGER AND invites.team_id = $2::INTEGER]
+[parameters: (741185494, 1)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:14 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams/invite
+Метод: POST
+Статус: 500
+Тело ответа: {
+    "detail": {
+        "result": "Error",
+        "data": "Internal Server Error"
+    }
+}
+2025-03-13 at 03:14 | INFO | True | True
+2025-03-13 at 03:14 | ERROR | Ошибка при получении пользователя: unable to perform operation on <TCPTransport closed=True reading=False 0x14002c1d0>; the handler is closed
+2025-03-13 at 03:14 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:14 | INFO | Поиск одной записи Hackathon по фильтрам: {'id': 2}
+2025-03-13 at 03:14 | ERROR | Ошибка при поиске записи по фильтрам {'id': 2}: (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT hackathons.name, hackathons.start_description, hackathons.description, hackathons.max_members, hackathons.start_date, hackathons.end_date, hackathons.id, hackathons.created_at, hackathons.updated_at 
+FROM hackathons 
+WHERE hackathons.id = $1::INTEGER]
+[parameters: (2,)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:14 | ERROR | Ошибка при обновлении команды: (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT hackathons.name, hackathons.start_description, hackathons.description, hackathons.max_members, hackathons.start_date, hackathons.end_date, hackathons.id, hackathons.created_at, hackathons.updated_at 
+FROM hackathons 
+WHERE hackathons.id = $1::INTEGER]
+[parameters: (2,)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:14 | ERROR | Unexpected Error in function: update_team with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x108d27bf0>, 'user': None, 'team_id': 2, 'team': TeamUpdate(name='Olso', is_open=False, description='Команда разработчиков корпоративных приложений')}
+  - (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT hackathons.name, hackathons.start_description, hackathons.description, hackathons.max_members, hackathons.start_date, hackathons.end_date, hackathons.id, hackathons.created_at, hackathons.updated_at 
+FROM hackathons 
+WHERE hackathons.id = $1::INTEGER]
+[parameters: (2,)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:14 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams/2
+Метод: PUT
+Статус: 500
+Тело ответа: {
+    "detail": {
+        "result": "Error",
+        "data": "Internal Server Error"
+    }
+}
+2025-03-13 at 03:14 | INFO | True | True
+2025-03-13 at 03:14 | ERROR | Ошибка при получении пользователя: unable to perform operation on <TCPTransport closed=True reading=False 0x14002d700>; the handler is closed
+2025-03-13 at 03:14 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:14 | INFO | Поиск одной записи Hackathon по фильтрам: {'id': 17}
+2025-03-13 at 03:14 | ERROR | Ошибка при поиске записи по фильтрам {'id': 17}: (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT hackathons.name, hackathons.start_description, hackathons.description, hackathons.max_members, hackathons.start_date, hackathons.end_date, hackathons.id, hackathons.created_at, hackathons.updated_at 
+FROM hackathons 
+WHERE hackathons.id = $1::INTEGER]
+[parameters: (17,)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:14 | ERROR | Ошибка при выходе из команды: (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT hackathons.name, hackathons.start_description, hackathons.description, hackathons.max_members, hackathons.start_date, hackathons.end_date, hackathons.id, hackathons.created_at, hackathons.updated_at 
+FROM hackathons 
+WHERE hackathons.id = $1::INTEGER]
+[parameters: (17,)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:14 | ERROR | Unexpected Error in function: leave_team with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x108d521e0>, 'user': None, 'team_id': 17}
+  - (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT hackathons.name, hackathons.start_description, hackathons.description, hackathons.max_members, hackathons.start_date, hackathons.end_date, hackathons.id, hackathons.created_at, hackathons.updated_at 
+FROM hackathons 
+WHERE hackathons.id = $1::INTEGER]
+[parameters: (17,)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:14 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams/17/leave
+Метод: DELETE
+Статус: 500
+Тело ответа: {
+    "detail": {
+        "result": "Error",
+        "data": "Internal Server Error"
+    }
+}
+2025-03-13 at 03:14 | INFO | True | True
+2025-03-13 at 03:14 | ERROR | Ошибка при получении пользователя: unable to perform operation on <TCPTransport closed=True reading=False 0x14002f720>; the handler is closed
+2025-03-13 at 03:14 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:14 | INFO | Поиск одной записи Hackathon по фильтрам: {'id': 17}
+2025-03-13 at 03:14 | ERROR | Ошибка при поиске записи по фильтрам {'id': 17}: (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT hackathons.name, hackathons.start_description, hackathons.description, hackathons.max_members, hackathons.start_date, hackathons.end_date, hackathons.id, hackathons.created_at, hackathons.updated_at 
+FROM hackathons 
+WHERE hackathons.id = $1::INTEGER]
+[parameters: (17,)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:14 | ERROR | Ошибка при удалении команды: (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT hackathons.name, hackathons.start_description, hackathons.description, hackathons.max_members, hackathons.start_date, hackathons.end_date, hackathons.id, hackathons.created_at, hackathons.updated_at 
+FROM hackathons 
+WHERE hackathons.id = $1::INTEGER]
+[parameters: (17,)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:14 | ERROR | Unexpected Error in function: delete_team with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x108d51be0>, 'user': None, 'team_id': 17}
+  - (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: cannot perform operation: another operation is in progress
+[SQL: SELECT hackathons.name, hackathons.start_description, hackathons.description, hackathons.max_members, hackathons.start_date, hackathons.end_date, hackathons.id, hackathons.created_at, hackathons.updated_at 
+FROM hackathons 
+WHERE hackathons.id = $1::INTEGER]
+[parameters: (17,)]
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-03-13 at 03:14 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams/17
+Метод: DELETE
+Статус: 500
+Тело ответа: {
+    "detail": {
+        "result": "Error",
+        "data": "Internal Server Error"
+    }
+}
+2025-03-13 at 03:35 | INFO | True | True
+2025-03-13 at 03:35 | ERROR | Ошибка при получении пользователя: name 'user_id' is not defined
+2025-03-13 at 03:35 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:35 | INFO | Поиск одной записи Hackathon по фильтрам: {'id': 17}
+2025-03-13 at 03:35 | INFO | Запись не найдена по фильтрам: {'id': 17}
+2025-03-13 at 03:35 | ERROR | Ошибка при удалении команды: 404: Команда не найдена
+2025-03-13 at 03:35 | WARNING | HTTPException in function: delete_team with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x117057e30>, 'user': None, 'team_id': 17}
+  - Команда не найдена (status_code: 404)
+2025-03-13 at 03:35 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams/17
+Метод: DELETE
+Статус: 404
+Тело ответа: {
+    "detail": "Команда не найдена"
+}
+2025-03-13 at 03:35 | INFO | Поиск всех записей Team по фильтрам: {}
+2025-03-13 at 03:35 | INFO | Найдено 6 записей.
+2025-03-13 at 03:35 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams
+Метод: GET
+Статус: 200
+Тело ответа: [
+    {
+        "id": 1,
+        "name": "Нейросети будущего",
+        "is_open": true,
+        "description": "Разработка передовых решений на базе ИИ для лучшего будущего.",
+        "hackathon_id": 1
+    },
+    {
+        "id": 2,
+        "name": "Кодовые ниндзя",
+        "is_open": false,
+        "description": "Команда по спортивному программированию, готовая к любым вызовам!",
+        "hackathon_id": 2
+    },
+    {
+        "id": 3,
+        "name": "Аналитики данных",
+        "is_open": true,
+        "description": "Раскрываем силу данных с помощью анализа и визуализации",
+        "hackathon_id": 1
+    },
+    {
+        "id": 4,
+        "name": "Веб-воины",
+        "is_open": true,
+        "description": "Создаем инновационные и удобные веб-приложения",
+        "hackathon_id": 3
+    },
+    {
+        "id": 5,
+        "name": "Кибер-защитники",
+        "is_open": false,
+        "description": "Защищаем цифровые активы и обеспечиваем кибербезопасность",
+        "hackathon_id": 2
+    },
+    {
+        "id": 17,
+        "name": "Olso",
+        "is_open": true,
+        "description": "Команда разработчиков корпоративных приложений",
+        "hackathon_id": 2
+    }
+]
+2025-03-13 at 03:36 | INFO | Поиск одной записи Team по фильтрам: {'id': 1}
+2025-03-13 at 03:36 | INFO | Запись найдена по фильтрам: {'id': 1}
+2025-03-13 at 03:36 | INFO | Поиск всех участников для team_id: 1
+2025-03-13 at 03:36 | INFO | Найдено 2 участников для team_id: 1
+2025-03-13 at 03:36 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams/1
+Метод: GET
+Статус: 200
+Тело ответа: {
+    "team": {
+        "id": 1,
+        "name": "Нейросети будущего",
+        "is_open": true,
+        "description": "Разработка передовых решений на базе ИИ для лучшего будущего.",
+        "hackathon_id": 1
+    },
+    "members": [
+        {
+            "id": 2,
+            "user_id": 2,
+            "team_id": 1,
+            "tg_name": "fukkacum1",
+            "role": "frontend"
+        },
+        {
+            "id": 1,
+            "user_id": 1,
+            "team_id": 1,
+            "tg_name": "bomjkee",
+            "role": "leader"
+        }
+    ]
+}
+2025-03-13 at 03:37 | INFO | Команда из Redis
+2025-03-13 at 03:37 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams/1
+Метод: GET
+Статус: 200
+Тело ответа: {
+    "team": {
+        "id": 1,
+        "name": "Нейросети будущего",
+        "is_open": true,
+        "description": "Разработка передовых решений на базе ИИ для лучшего будущего.",
+        "hackathon_id": 1
+    },
+    "members": [
+        {
+            "id": 2,
+            "user_id": 2,
+            "team_id": 1,
+            "tg_name": "fukkacum1",
+            "role": "frontend"
+        },
+        {
+            "id": 1,
+            "user_id": 1,
+            "team_id": 1,
+            "tg_name": "bomjkee",
+            "role": "leader"
+        }
+    ]
+}
+2025-03-13 at 03:37 | INFO | Поиск всех записей Hackathon по фильтрам: {}
+2025-03-13 at 03:37 | INFO | Найдено 5 записей.
+2025-03-13 at 03:37 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/hackathons
+Метод: GET
+Статус: 200
+Тело ответа: [
+    {
+        "id": 1,
+        "name": "Хакатон МИРЭА 2025",
+        "start_description": "Раскройте свой кодерский потенциал на Хакатоне МИРЭА!"
+    },
+    {
+        "id": 2,
+        "name": "Кодфест Глобал",
+        "start_description": "Глобальный хакатон, объединяющий разработчиков со всего мира."
+    },
+    {
+        "id": 3,
+        "name": "DataDive Аналитика",
+        "start_description": "Погрузитесь в данные и откройте ценные идеи."
+    },
+    {
+        "id": 4,
+        "name": "WebDev Инновации",
+        "start_description": "Расширьте границы веб-разработки."
+    },
+    {
+        "id": 5,
+        "name": "CyberSec Вызов",
+        "start_description": "Проверьте свои навыки кибербезопасности в смоделированной среде."
+    }
+]
+2025-03-13 at 03:38 | INFO | Поиск одной записи Hackathon по фильтрам: {'id': 1}
+2025-03-13 at 03:38 | INFO | Запись найдена по фильтрам: {'id': 1}
+2025-03-13 at 03:38 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/hackathons/1
+Метод: GET
+Статус: 200
+Тело ответа: {
+    "id": 1,
+    "name": "Хакатон МИРЭА 2025",
+    "start_description": "Раскройте свой кодерский потенциал на Хакатоне МИРЭА!",
+    "description": "Присоединяйтесь к нам на выходные инноваций и сотрудничества.",
+    "max_members": 5,
+    "start_date": 1741014000,
+    "end_date": 1741362276
+}
+2025-03-13 at 03:38 | INFO | True | True
+2025-03-13 at 03:38 | ERROR | Ошибка при получении пользователя: name 'user_id' is not defined
+2025-03-13 at 03:38 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:38 | ERROR | Ошибка при регистрации пользователя на хакатон: 'NoneType' object has no attribute 'get'
+2025-03-13 at 03:38 | ERROR | Unexpected Error in function: register_user with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x109452540>, 'user': None, 'user_info': UserInfoUpdate(full_name='Смирнов Егор Андреевич', is_mirea_student=True, group='ВВВВ-81-23')}
+  - 'NoneType' object has no attribute 'get'
+2025-03-13 at 03:38 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/register
+Метод: POST
+Статус: 500
+Тело ответа: {
+    "detail": {
+        "result": "Error",
+        "data": "Internal Server Error"
+    }
+}
+2025-03-13 at 03:39 | INFO | True | True
+2025-03-13 at 03:39 | ERROR | Ошибка при получении пользователя: name 'user_id' is not defined
+2025-03-13 at 03:39 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:39 | ERROR | Ошибка при регистрации пользователя на хакатон: 'NoneType' object has no attribute 'get'
+2025-03-13 at 03:39 | ERROR | Unexpected Error in function: register_user with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x106cd2b70>, 'user': None, 'user_info': UserInfoUpdate(full_name='Смирнов Егор Андреевич', is_mirea_student=True, group='ВВВВ-81-23')}
+  - 'NoneType' object has no attribute 'get'
+2025-03-13 at 03:39 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/register
+Метод: POST
+Статус: 500
+Тело ответа: {
+    "detail": {
+        "result": "Error",
+        "data": "Internal Server Error"
+    }
+}
+2025-03-13 at 03:41 | INFO | True | True
+2025-03-13 at 03:41 | INFO | Поиск одной записи User по фильтрам: {'telegram_id': 805550691}
+2025-03-13 at 03:41 | INFO | Запись найдена по фильтрам: {'telegram_id': 805550691}
+2025-03-13 at 03:41 | INFO | Пользователь из базы данных
+2025-03-13 at 03:41 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:41 | ERROR | Ошибка при регистрации пользователя на хакатон: 409: Пользователь уже существует
+2025-03-13 at 03:41 | WARNING | HTTPException in function: register_user with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x106b7dd60>, 'user': {'id': 1, 'telegram_id': 805550691, 'first_name': '匚ㄥㄖㄩᗪ', 'last_name': '', 'username': 'bomjkee', 'full_name': 'Смирнов Егор Андреевич', 'is_mirea_student': 'True', 'group': 'ВВВВ-81-23', 'last_active': 1741826482}, 'user_info': UserInfoUpdate(full_name='Смирнов Егор Андреевич', is_mirea_student=True, group='ВВВВ-81-23')}
+  - Пользователь уже существует (status_code: 409)
+2025-03-13 at 03:41 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/register
+Метод: POST
+Статус: 409
+Тело ответа: {
+    "detail": "Пользователь уже существует"
+}
+2025-03-13 at 03:43 | INFO | True | True
+2025-03-13 at 03:43 | INFO | Пользователь из Redis
+2025-03-13 at 03:43 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 03:43 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:43 | ERROR | Ошибка при регистрации пользователя на хакатон: 409: Пользователь уже существует
+2025-03-13 at 03:43 | WARNING | HTTPException in function: register_user with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10b29e7b0>, 'user': {'id': 1, 'telegram_id': 805550691, 'first_name': '匚ㄥㄖㄩᗪ', 'last_name': '', 'username': 'bomjkee', 'full_name': 'Смирнов Егор Андреевич', 'is_mirea_student': 'True', 'group': 'ВВВВ-81-23', 'last_active': 1741826482}, 'user_info': UserInfoUpdate(full_name='Смирнов Егор Андреевич', is_mirea_student=True, group='ВВВВ-81-23')}
+  - Пользователь уже существует (status_code: 409)
+2025-03-13 at 03:43 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/register
+Метод: POST
+Статус: 409
+Тело ответа: {
+    "detail": "Пользователь уже существует"
+}
+2025-03-13 at 03:43 | INFO | True | True
+2025-03-13 at 03:43 | INFO | Пользователь из Redis
+2025-03-13 at 03:43 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 03:43 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:43 | ERROR | Ошибка при регистрации пользователя на хакатон: 409: Пользователь уже существует
+2025-03-13 at 03:43 | WARNING | HTTPException in function: register_user with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10f482600>, 'user': {'id': 1, 'telegram_id': 805550691, 'first_name': '匚ㄥㄖㄩᗪ', 'last_name': '', 'username': 'bomjkee', 'full_name': 'Смирнов Егор Андреевич', 'is_mirea_student': 'True', 'group': 'ВВВВ-81-23', 'last_active': 1741826582.7350578}, 'user_info': UserInfoUpdate(full_name='Смирнов Егор Андреевич', is_mirea_student=True, group='ВВВВ-81-23')}
+  - Пользователь уже существует (status_code: 409)
+2025-03-13 at 03:43 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/register
+Метод: POST
+Статус: 409
+Тело ответа: {
+    "detail": "Пользователь уже существует"
+}
+2025-03-13 at 03:46 | INFO | Сброс кеша в Redis
+2025-03-13 at 03:48 | INFO | True | True
+2025-03-13 at 03:48 | INFO | Поиск одной записи User по фильтрам: {'telegram_id': 805550691}
+2025-03-13 at 03:48 | INFO | Запись найдена по фильтрам: {'telegram_id': 805550691}
+2025-03-13 at 03:48 | INFO | Пользователь из базы данных
+2025-03-13 at 03:48 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:48 | ERROR | Ошибка при регистрации пользователя на хакатон: 409: Пользователь уже существует
+2025-03-13 at 03:48 | WARNING | HTTPException in function: register_user with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10894eed0>, 'user': {'id': 1, 'telegram_id': 805550691, 'first_name': '匚ㄥㄖㄩᗪ', 'last_name': '', 'username': 'bomjkee', 'full_name': '<null>', 'is_mirea_student': 'None', 'group': '<null>', 'last_active': 1741826898}, 'user_info': UserInfoUpdate(full_name='Смирнов Егор Андреевич', is_mirea_student=True, group='ВВВВ-81-23')}
+  - Пользователь уже существует (status_code: 409)
+2025-03-13 at 03:48 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/register
+Метод: POST
+Статус: 409
+Тело ответа: {
+    "detail": "Пользователь уже существует"
+}
+2025-03-13 at 03:49 | INFO | True | True
+2025-03-13 at 03:49 | INFO | Пользователь из Redis
+2025-03-13 at 03:49 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 03:49 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:49 | ERROR | Ошибка при регистрации пользователя на хакатон: 409: Пользователь уже существует
+2025-03-13 at 03:49 | WARNING | HTTPException in function: register_user with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1069de7b0>, 'user': {'id': 1, 'telegram_id': 805550691, 'first_name': '匚ㄥㄖㄩᗪ', 'last_name': '', 'username': 'bomjkee', 'full_name': '<null>', 'is_mirea_student': 'None', 'group': '<null>', 'last_active': 1741826898}, 'user_info': UserInfoUpdate(full_name='Смирнов Егор Андреевич', is_mirea_student=True, group='ВВВВ-81-23')}
+  - Пользователь уже существует (status_code: 409)
+2025-03-13 at 03:49 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/register
+Метод: POST
+Статус: 409
+Тело ответа: {
+    "detail": "Пользователь уже существует"
+}
+2025-03-13 at 03:50 | INFO | True | True
+2025-03-13 at 03:50 | INFO | Пользователь из Redis
+2025-03-13 at 03:50 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 03:50 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:50 | ERROR | Ошибка при регистрации пользователя на хакатон: 409: Пользователь уже существует
+2025-03-13 at 03:50 | WARNING | HTTPException in function: register_user with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10f3d93a0>, 'user': {'id': 1, 'telegram_id': 805550691, 'first_name': '匚ㄥㄖㄩᗪ', 'last_name': '', 'username': 'bomjkee', 'full_name': '<null>', 'is_mirea_student': 'None', 'group': '<null>', 'last_active': 1741826964.335552}, 'user_info': UserInfoUpdate(full_name='Смирнов Егор Андреевич', is_mirea_student=True, group='ВВВВ-81-23')}
+  - Пользователь уже существует (status_code: 409)
+2025-03-13 at 03:50 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/register
+Метод: POST
+Статус: 409
+Тело ответа: {
+    "detail": "Пользователь уже существует"
+}
+2025-03-13 at 03:52 | INFO | True | True
+2025-03-13 at 03:52 | INFO | Пользователь из Redis
+2025-03-13 at 03:52 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 03:52 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:52 | ERROR | Ошибка при регистрации пользователя на хакатон: 409: Пользователь уже существует
+2025-03-13 at 03:52 | WARNING | HTTPException in function: register_user with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1152d9160>, 'user': {'id': 1, 'telegram_id': 805550691, 'first_name': '匚ㄥㄖㄩᗪ', 'last_name': '', 'username': 'bomjkee', 'full_name': '<null>', 'is_mirea_student': 'None', 'group': '<null>', 'last_active': 1741827027.5593112}, 'user_info': UserInfoUpdate(full_name='Смирнов Егор Андреевич', is_mirea_student=True, group='ВВВВ-81-23')}
+  - Пользователь уже существует (status_code: 409)
+2025-03-13 at 03:52 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/register
+Метод: POST
+Статус: 409
+Тело ответа: {
+    "detail": "Пользователь уже существует"
+}
+2025-03-13 at 03:52 | INFO | True | True
+2025-03-13 at 03:52 | INFO | Пользователь из Redis
+2025-03-13 at 03:52 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 03:52 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:52 | INFO | Обновление записей User по фильтру: {'id': 1} с параметрами: {'full_name': 'Смирнов Егор Андреевич', 'is_mirea_student': True, 'group': 'ВВВВ-81-23'}
+2025-03-13 at 03:52 | INFO | Обновлено 1 записей.
+2025-03-13 at 03:52 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/register
+Метод: POST
+Статус: 200
+Тело ответа: {
+    "status": "Success",
+    "message": "Пользователь успешно зарегистрирован"
+}
+2025-03-13 at 03:53 | INFO | True | True
+2025-03-13 at 03:53 | INFO | Пользователь из Redis
+2025-03-13 at 03:53 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 03:53 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:53 | ERROR | Ошибка при регистрации пользователя на хакатон: 409: Пользователь уже существует
+2025-03-13 at 03:53 | WARNING | HTTPException in function: register_user with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x107599d60>, 'user': {'id': 1, 'telegram_id': 805550691, 'first_name': '匚ㄥㄖㄩᗪ', 'last_name': '', 'username': 'bomjkee', 'full_name': 'Смирнов Егор Андреевич', 'is_mirea_student': 'True', 'group': 'ВВВВ-81-23', 'last_active': 1741827176.458262}, 'user_info': UserInfoUpdate(full_name='Смирнов Егор Андреевич', is_mirea_student=True, group='ВВВВ-81-23')}
+  - Пользователь уже существует (status_code: 409)
+2025-03-13 at 03:53 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/register
+Метод: POST
+Статус: 409
+Тело ответа: {
+    "detail": "Пользователь уже существует"
+}
+2025-03-13 at 03:54 | INFO | True | True
+2025-03-13 at 03:54 | INFO | Пользователь из Redis
+2025-03-13 at 03:54 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 03:54 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:54 | ERROR | Ошибка при регистрации пользователя на хакатон: 409: Пользователь уже существует
+2025-03-13 at 03:54 | WARNING | HTTPException in function: register_user with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x12929a630>, 'user': {'id': 1, 'telegram_id': 805550691, 'first_name': '匚ㄥㄖㄩᗪ', 'last_name': '', 'username': 'bomjkee', 'full_name': 'Смирнов Егор Андреевич', 'is_mirea_student': 'True', 'group': 'ВВВВ-81-23', 'last_active': 1741827186.255563}, 'user_info': UserInfoUpdate(full_name='Смирнов Егор Андреевич', is_mirea_student=True, group='ВВВВ-81-23')}
+  - Пользователь уже существует (status_code: 409)
+2025-03-13 at 03:54 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/register
+Метод: POST
+Статус: 409
+Тело ответа: {
+    "detail": "Пользователь уже существует"
+}
+2025-03-13 at 03:54 | INFO | True | True
+2025-03-13 at 03:54 | INFO | Пользователь из Redis
+2025-03-13 at 03:54 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 03:54 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:54 | ERROR | Ошибка при регистрации пользователя на хакатон: 409: Пользователь уже существует
+2025-03-13 at 03:54 | WARNING | HTTPException in function: register_user with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10aa4a540>, 'user': {'id': 1, 'telegram_id': 805550691, 'first_name': '匚ㄥㄖㄩᗪ', 'last_name': '', 'username': 'bomjkee', 'full_name': 'Смирнов Егор Андреевич', 'is_mirea_student': 'True', 'group': 'ВВВВ-81-23', 'last_active': 1741827245.400519}, 'user_info': UserInfoUpdate(full_name='Смирнов Егор Андреевич', is_mirea_student=True, group='ВВВВ-81-23')}
+  - Пользователь уже существует (status_code: 409)
+2025-03-13 at 03:54 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/register
+Метод: POST
+Статус: 409
+Тело ответа: {
+    "detail": "Пользователь уже существует"
+}
+2025-03-13 at 03:54 | INFO | Сброс кеша в Redis
+2025-03-13 at 03:55 | INFO | True | True
+2025-03-13 at 03:55 | INFO | Поиск одной записи User по фильтрам: {'telegram_id': 805550691}
+2025-03-13 at 03:55 | INFO | Запись найдена по фильтрам: {'telegram_id': 805550691}
+2025-03-13 at 03:55 | INFO | Пользователь из базы данных
+2025-03-13 at 03:55 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:55 | INFO | Обновление записей User по фильтру: {'id': 1} с параметрами: {'full_name': 'Смирнов Егор Андреевич', 'is_mirea_student': True, 'group': 'ВВВВ-81-23'}
+2025-03-13 at 03:55 | INFO | Обновлено 1 записей.
+2025-03-13 at 03:55 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/register
+Метод: POST
+Статус: 200
+Тело ответа: {
+    "status": "Success",
+    "message": "Пользователь успешно зарегистрирован"
+}
+2025-03-13 at 03:56 | INFO | True | True
+2025-03-13 at 03:56 | INFO | Пользователь из Redis
+2025-03-13 at 03:56 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 03:56 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:56 | ERROR | Ошибка при регистрации пользователя на хакатон: 409: Пользователь уже существует
+2025-03-13 at 03:56 | WARNING | HTTPException in function: register_user with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10c826b10>, 'user': {'id': 1, 'telegram_id': 805550691, 'first_name': '匚ㄥㄖㄩᗪ', 'last_name': '', 'username': 'bomjkee', 'full_name': 'Смирнов Егор Андреевич', 'is_mirea_student': 'True', 'group': 'ВВВВ-81-23', 'last_active': 1741827334}, 'user_info': UserInfoUpdate(full_name='Смирнов Егор Андреевич', is_mirea_student=True, group='ВВВВ-81-23')}
+  - Пользователь уже существует (status_code: 409)
+2025-03-13 at 03:56 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/register
+Метод: POST
+Статус: 409
+Тело ответа: {
+    "detail": "Пользователь уже существует"
+}
+2025-03-13 at 03:57 | INFO | Сброс кеша в Redis
+2025-03-13 at 03:57 | INFO | True | True
+2025-03-13 at 03:57 | INFO | Поиск одной записи User по фильтрам: {'telegram_id': 805550691}
+2025-03-13 at 03:57 | INFO | Запись найдена по фильтрам: {'telegram_id': 805550691}
+2025-03-13 at 03:57 | INFO | Пользователь из базы данных
+2025-03-13 at 03:57 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:57 | INFO | Обновление записей User по фильтру: {'id': 1} с параметрами: {'full_name': 'Смирнов Егор Андреевич', 'is_mirea_student': True, 'group': 'ВВВВ-81-23'}
+2025-03-13 at 03:57 | INFO | Обновлено 1 записей.
+2025-03-13 at 03:57 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/register
+Метод: POST
+Статус: 200
+Тело ответа: {
+    "status": "Success",
+    "message": "Пользователь успешно зарегистрирован"
+}
+2025-03-13 at 03:58 | INFO | True | True
+2025-03-13 at 03:58 | INFO | Пользователь из Redis
+2025-03-13 at 03:58 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 03:58 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:58 | ERROR | Ошибка при поиске команды с участниками для user ID 1: Multiple rows were found when one or none was required
+2025-03-13 at 03:58 | ERROR | Ошибка при получении профиля пользователя: Multiple rows were found when one or none was required
+2025-03-13 at 03:58 | ERROR | Unexpected Error in function: get_my_profile with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x106e19d60>, 'user': {'id': 1, 'telegram_id': 805550691, 'first_name': '匚ㄥㄖㄩᗪ', 'last_name': '', 'username': 'bomjkee', 'full_name': 'Смирнов Егор Андреевич', 'is_mirea_student': 'True', 'group': 'ВВВВ-81-23', 'last_active': 1741827453}}
+  - Multiple rows were found when one or none was required
+2025-03-13 at 03:58 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/my_profile
+Метод: GET
+Статус: 500
+Тело ответа: {
+    "detail": {
+        "result": "Error",
+        "data": "Internal Server Error"
+    }
+}
+2025-03-13 at 03:59 | INFO | True | True
+2025-03-13 at 03:59 | INFO | Пользователь из Redis
+2025-03-13 at 03:59 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 03:59 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 03:59 | INFO | Команда найдена для user ID 1: Нейросети будущего
+2025-03-13 at 03:59 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/my_profile
+Метод: GET
+Статус: 200
+Тело ответа: {
+    "user": {
+        "id": 1,
+        "username": "bomjkee",
+        "first_name": "匚ㄥㄖㄩᗪ",
+        "last_name": ""
+    },
+    "team": {
+        "id": 1,
+        "name": "Нейросети будущего",
+        "is_open": true,
+        "description": "Разработка передовых решений на базе ИИ для лучшего будущего.",
+        "hackathon_id": 1
+    }
+}
+2025-03-13 at 04:00 | INFO | True | True
+2025-03-13 at 04:00 | INFO | Пользователь из Redis
+2025-03-13 at 04:00 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 04:00 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 04:00 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/register
+Метод: GET
+Статус: 200
+Тело ответа: {
+    "is_registered": true
+}
+2025-03-13 at 04:01 | INFO | True | True
+2025-03-13 at 04:01 | INFO | Пользователь из Redis
+2025-03-13 at 04:01 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 04:01 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 04:01 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/register
+Метод: GET
+Статус: 200
+Тело ответа: {
+    "is_registered": true
+}
+2025-03-13 at 04:01 | INFO | Поиск одной записи Hackathon по фильтрам: {'id': 1}
+2025-03-13 at 04:01 | INFO | Запись найдена по фильтрам: {'id': 1}
+2025-03-13 at 04:01 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/hackathons/1
+Метод: GET
+Статус: 200
+Тело ответа: {
+    "id": 1,
+    "name": "Хакатон МИРЭА 2025",
+    "start_description": "Раскройте свой кодерский потенциал на Хакатоне МИРЭА!",
+    "description": "Присоединяйтесь к нам на выходные инноваций и сотрудничества.",
+    "max_members": 5,
+    "start_date": 1741014000,
+    "end_date": 1741362276
+}
+2025-03-13 at 04:01 | INFO | Поиск всех записей Hackathon по фильтрам: {}
+2025-03-13 at 04:01 | INFO | Найдено 5 записей.
+2025-03-13 at 04:01 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/hackathons
+Метод: GET
+Статус: 200
+Тело ответа: [
+    {
+        "id": 1,
+        "name": "Хакатон МИРЭА 2025",
+        "start_description": "Раскройте свой кодерский потенциал на Хакатоне МИРЭА!"
+    },
+    {
+        "id": 2,
+        "name": "Кодфест Глобал",
+        "start_description": "Глобальный хакатон, объединяющий разработчиков со всего мира."
+    },
+    {
+        "id": 3,
+        "name": "DataDive Аналитика",
+        "start_description": "Погрузитесь в данные и откройте ценные идеи."
+    },
+    {
+        "id": 4,
+        "name": "WebDev Инновации",
+        "start_description": "Расширьте границы веб-разработки."
+    },
+    {
+        "id": 5,
+        "name": "CyberSec Вызов",
+        "start_description": "Проверьте свои навыки кибербезопасности в смоделированной среде."
+    }
+]
+2025-03-13 at 04:01 | INFO | True | True
+2025-03-13 at 04:01 | INFO | Пользователь из Redis
+2025-03-13 at 04:01 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 04:01 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 04:01 | INFO | Поиск одной записи Team по фильтрам: {'name': 'Olso'}
+2025-03-13 at 04:01 | INFO | Запись не найдена по фильтрам: {'name': 'Olso'}
+2025-03-13 at 04:01 | INFO | Добавление записи Team с параметрами: {'name': 'Olso', 'is_open': True, 'description': 'Команда разработчиков корпоративных приложений', 'hackathon_id': 2}
+2025-03-13 at 04:01 | INFO | Запись Team успешно добавлена.
+2025-03-13 at 04:01 | INFO | Поиск существующего участника с user_id: 1 и hackathon_id: 2
+2025-03-13 at 04:01 | INFO | Участник с user_id: 1 и hackathon_id: 2 не найден
+2025-03-13 at 04:01 | INFO | Добавление записи Member с параметрами: {'user_id': 1, 'team_id': 18, 'tg_name': 'bomjkee', 'role': 'leader'}
+2025-03-13 at 04:01 | INFO | Запись Member успешно добавлена.
+2025-03-13 at 04:01 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams
+Метод: POST
+Статус: 200
+Тело ответа: {
+    "id": 18,
+    "name": "Olso",
+    "is_open": true,
+    "description": "Команда разработчиков корпоративных приложений",
+    "hackathon_id": 2
+}
+2025-03-13 at 04:02 | INFO | True | True
+2025-03-13 at 04:02 | INFO | Пользователь из Redis
+2025-03-13 at 04:02 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 04:02 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 04:02 | INFO | Поиск одной записи Invite по фильтрам: {'invite_user_id': 741185494, 'team_id': 1}
+2025-03-13 at 04:02 | INFO | Запись не найдена по фильтрам: {'invite_user_id': 741185494, 'team_id': 1}
+2025-03-13 at 04:02 | INFO | Поиск одной записи Hackathon по фильтрам: {'id': 1}
+2025-03-13 at 04:02 | INFO | Запись найдена по фильтрам: {'id': 1}
+2025-03-13 at 04:02 | ERROR | Ошибка при приглашении пользователя в команду: 2 validation errors for STeam
+is_open
+  Field required [type=missing, input_value={'name': 'Хакатон ...updated_at': 1740919492}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.10/v/missing
+hackathon_id
+  Field required [type=missing, input_value={'name': 'Хакатон ...updated_at': 1740919492}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.10/v/missing
+2025-03-13 at 04:02 | ERROR | Unexpected Error in function: invite_user_to_team with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10aa55d60>, 'user': {'id': 1, 'telegram_id': 805550691, 'first_name': '匚ㄥㄖㄩᗪ', 'last_name': '', 'username': 'bomjkee', 'full_name': 'Смирнов Егор Андреевич', 'is_mirea_student': 'True', 'group': 'ВВВВ-81-23', 'last_active': 1741827698.164352}, 'invite': InviteCreate(invite_user_id=741185494, team_id=1)}
+  - 2 validation errors for STeam
+is_open
+  Field required [type=missing, input_value={'name': 'Хакатон ...updated_at': 1740919492}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.10/v/missing
+hackathon_id
+  Field required [type=missing, input_value={'name': 'Хакатон ...updated_at': 1740919492}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.10/v/missing
+2025-03-13 at 04:02 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams/invite
+Метод: POST
+Статус: 500
+Тело ответа: {
+    "detail": {
+        "result": "Error",
+        "data": "Internal Server Error"
+    }
+}
+2025-03-13 at 04:04 | INFO | True | True
+2025-03-13 at 04:04 | INFO | Пользователь из Redis
+2025-03-13 at 04:04 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 04:04 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 04:04 | INFO | Поиск одной записи Team по фильтрам: {'name': 'Olso'}
+2025-03-13 at 04:04 | INFO | Запись найдена по фильтрам: {'name': 'Olso'}
+2025-03-13 at 04:04 | ERROR | Ошибка при создании команды: 409: Команда с таким именем уже существует
+2025-03-13 at 04:04 | WARNING | HTTPException in function: create_team with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1091bb920>, 'user': {'id': 1, 'telegram_id': 805550691, 'first_name': '匚ㄥㄖㄩᗪ', 'last_name': '', 'username': 'bomjkee', 'full_name': 'Смирнов Егор Андреевич', 'is_mirea_student': 'True', 'group': 'ВВВВ-81-23', 'last_active': 1741827731.836287}, 'team': TeamCreate(name='Olso', is_open=True, description='Команда разработчиков корпоративных приложений', hackathon_id=2)}
+  - Команда с таким именем уже существует (status_code: 409)
+2025-03-13 at 04:04 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams
+Метод: POST
+Статус: 409
+Тело ответа: {
+    "detail": "Команда с таким именем уже существует"
+}
+2025-03-13 at 04:04 | INFO | True | True
+2025-03-13 at 04:04 | INFO | Пользователь из Redis
+2025-03-13 at 04:04 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 04:04 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 04:04 | INFO | Поиск одной записи Team по фильтрам: {'name': 'Olso'}
+2025-03-13 at 04:04 | INFO | Запись не найдена по фильтрам: {'name': 'Olso'}
+2025-03-13 at 04:04 | INFO | Добавление записи Team с параметрами: {'name': 'Olso', 'is_open': True, 'description': 'Команда разработчиков корпоративных приложений', 'hackathon_id': 2}
+2025-03-13 at 04:04 | INFO | Запись Team успешно добавлена.
+2025-03-13 at 04:04 | INFO | Поиск существующего участника с user_id: 1 и hackathon_id: 2
+2025-03-13 at 04:04 | INFO | Участник с user_id: 1 и hackathon_id: 2 не найден
+2025-03-13 at 04:04 | INFO | Добавление записи Member с параметрами: {'user_id': 1, 'team_id': 19, 'tg_name': 'bomjkee', 'role': 'leader'}
+2025-03-13 at 04:04 | INFO | Запись Member успешно добавлена.
+2025-03-13 at 04:04 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams
+Метод: POST
+Статус: 200
+Тело ответа: {
+    "id": 19,
+    "name": "Olso",
+    "is_open": true,
+    "description": "Команда разработчиков корпоративных приложений",
+    "hackathon_id": 2
+}
+2025-03-13 at 04:06 | INFO | True | True
+2025-03-13 at 04:06 | INFO | Пользователь из Redis
+2025-03-13 at 04:06 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 04:06 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 04:06 | INFO | Поиск одной записи Team по фильтрам: {'name': 'Olso'}
+2025-03-13 at 04:06 | INFO | Запись не найдена по фильтрам: {'name': 'Olso'}
+2025-03-13 at 04:06 | INFO | Добавление записи Team с параметрами: {'name': 'Olso', 'is_open': True, 'description': 'Команда разработчиков корпоративных приложений', 'hackathon_id': 2}
+2025-03-13 at 04:06 | INFO | Запись Team успешно добавлена.
+2025-03-13 at 04:06 | INFO | Поиск существующего участника с user_id: 1 и hackathon_id: 2
+2025-03-13 at 04:06 | INFO | Участник с user_id: 1 и hackathon_id: 2 не найден
+2025-03-13 at 04:06 | INFO | Добавление записи Member с параметрами: {'user_id': 1, 'team_id': 20, 'tg_name': 'bomjkee', 'role': 'leader'}
+2025-03-13 at 04:06 | INFO | Запись Member успешно добавлена.
+2025-03-13 at 04:06 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams
+Метод: POST
+Статус: 200
+Тело ответа: {
+    "status": "Success",
+    "message": "Команда была успешно создана"
+}
+2025-03-13 at 04:07 | INFO | True | True
+2025-03-13 at 04:07 | INFO | Пользователь из Redis
+2025-03-13 at 04:07 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 04:07 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 04:07 | INFO | Поиск одной записи Hackathon по фильтрам: {'id': 20}
+2025-03-13 at 04:07 | INFO | Запись не найдена по фильтрам: {'id': 20}
+2025-03-13 at 04:07 | ERROR | Ошибка при удалении команды: 404: Команда не найдена
+2025-03-13 at 04:07 | WARNING | HTTPException in function: delete_team with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x117331d60>, 'user': {'id': 1, 'telegram_id': 805550691, 'first_name': '匚ㄥㄖㄩᗪ', 'last_name': '', 'username': 'bomjkee', 'full_name': 'Смирнов Егор Андреевич', 'is_mirea_student': 'True', 'group': 'ВВВВ-81-23', 'last_active': 1741827997.975418}, 'team_id': 20}
+  - Команда не найдена (status_code: 404)
+2025-03-13 at 04:07 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams/20
+Метод: DELETE
+Статус: 404
+Тело ответа: {
+    "detail": "Команда не найдена"
+}
+2025-03-13 at 04:09 | INFO | True | True
+2025-03-13 at 04:09 | INFO | Пользователь из Redis
+2025-03-13 at 04:09 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 04:09 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 04:09 | INFO | Поиск одной записи Team по фильтрам: {'id': 20}
+2025-03-13 at 04:09 | INFO | Запись найдена по фильтрам: {'id': 20}
+2025-03-13 at 04:09 | INFO | Поиск одной записи Member по фильтрам: {'user_id': 1, 'team_id': 20}
+2025-03-13 at 04:09 | INFO | Запись найдена по фильтрам: {'user_id': 1, 'team_id': 20}
+2025-03-13 at 04:09 | INFO | Поиск всех участников для team_id: 20
+2025-03-13 at 04:09 | INFO | Найдено 1 участников для team_id: 20
+2025-03-13 at 04:09 | INFO | Удаление записей Team по фильтру: {'id': 20}
+2025-03-13 at 04:09 | INFO | Удалено 1 записей.
+2025-03-13 at 04:09 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams/20
+Метод: DELETE
+Статус: 200
+Тело ответа: {
+    "status": "Success",
+    "message": "Команда успешно удалена"
+}
+2025-03-13 at 04:10 | INFO | True | True
+2025-03-13 at 04:10 | INFO | Пользователь из Redis
+2025-03-13 at 04:10 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 04:10 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 04:10 | INFO | Поиск одной записи Team по фильтрам: {'name': 'Olso'}
+2025-03-13 at 04:10 | INFO | Запись не найдена по фильтрам: {'name': 'Olso'}
+2025-03-13 at 04:10 | INFO | Добавление записи Team с параметрами: {'name': 'Olso', 'is_open': True, 'description': 'Команда разработчиков корпоративных приложений', 'hackathon_id': 2}
+2025-03-13 at 04:10 | INFO | Запись Team успешно добавлена.
+2025-03-13 at 04:10 | INFO | Поиск существующего участника с user_id: 1 и hackathon_id: 2
+2025-03-13 at 04:10 | INFO | Участник с user_id: 1 и hackathon_id: 2 не найден
+2025-03-13 at 04:10 | INFO | Добавление записи Member с параметрами: {'user_id': 1, 'team_id': 21, 'tg_name': 'bomjkee', 'role': 'leader'}
+2025-03-13 at 04:10 | INFO | Запись Member успешно добавлена.
+2025-03-13 at 04:10 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams
+Метод: POST
+Статус: 200
+Тело ответа: {
+    "status": "Success",
+    "message": "Команда была успешно создана"
+}
+2025-03-13 at 04:10 | INFO | True | True
+2025-03-13 at 04:10 | INFO | Пользователь из Redis
+2025-03-13 at 04:10 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 04:10 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 04:10 | INFO | Поиск одной записи Team по фильтрам: {'id': 21}
+2025-03-13 at 04:10 | INFO | Запись найдена по фильтрам: {'id': 21}
+2025-03-13 at 04:10 | INFO | Поиск одной записи Member по фильтрам: {'user_id': 1, 'team_id': 21}
+2025-03-13 at 04:10 | INFO | Запись найдена по фильтрам: {'user_id': 1, 'team_id': 21}
+2025-03-13 at 04:10 | INFO | Поиск всех участников для team_id: 21
+2025-03-13 at 04:10 | INFO | Найдено 1 участников для team_id: 21
+2025-03-13 at 04:10 | INFO | Удаление записей Team по фильтру: {'id': 21}
+2025-03-13 at 04:10 | INFO | Удалено 1 записей.
+2025-03-13 at 04:10 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams/21
+Метод: DELETE
+Статус: 200
+Тело ответа: {
+    "status": "Success",
+    "message": "Команда успешно удалена"
+}
+2025-03-13 at 04:10 | INFO | True | True
+2025-03-13 at 04:10 | INFO | Пользователь из Redis
+2025-03-13 at 04:10 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 04:10 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 04:10 | INFO | Поиск одной записи Team по фильтрам: {'name': 'Olso'}
+2025-03-13 at 04:10 | INFO | Запись не найдена по фильтрам: {'name': 'Olso'}
+2025-03-13 at 04:10 | INFO | Добавление записи Team с параметрами: {'name': 'Olso', 'is_open': True, 'description': 'Команда разработчиков корпоративных приложений', 'hackathon_id': 2}
+2025-03-13 at 04:10 | INFO | Запись Team успешно добавлена.
+2025-03-13 at 04:10 | INFO | Поиск существующего участника с user_id: 1 и hackathon_id: 2
+2025-03-13 at 04:10 | INFO | Участник с user_id: 1 и hackathon_id: 2 не найден
+2025-03-13 at 04:10 | INFO | Добавление записи Member с параметрами: {'user_id': 1, 'team_id': 22, 'tg_name': 'bomjkee', 'role': 'leader'}
+2025-03-13 at 04:10 | INFO | Запись Member успешно добавлена.
+2025-03-13 at 04:10 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams
+Метод: POST
+Статус: 200
+Тело ответа: {
+    "status": "Success",
+    "message": "Команда была успешно создана"
+}
+2025-03-13 at 04:10 | INFO | True | True
+2025-03-13 at 04:10 | INFO | Пользователь из Redis
+2025-03-13 at 04:10 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 04:10 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 04:10 | INFO | Поиск одной записи Team по фильтрам: {'name': 'Olso'}
+2025-03-13 at 04:10 | INFO | Запись найдена по фильтрам: {'name': 'Olso'}
+2025-03-13 at 04:10 | ERROR | Ошибка при создании команды: 409: Команда с таким именем уже существует
+2025-03-13 at 04:10 | WARNING | HTTPException in function: create_team with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1092ab200>, 'user': {'id': 1, 'telegram_id': 805550691, 'first_name': '匚ㄥㄖㄩᗪ', 'last_name': '', 'username': 'bomjkee', 'full_name': 'Смирнов Егор Андреевич', 'is_mirea_student': 'True', 'group': 'ВВВВ-81-23', 'last_active': 1741828242.884644}, 'team': TeamCreate(name='Olso', is_open=True, description='Команда разработчиков корпоративных приложений', hackathon_id=2)}
+  - Команда с таким именем уже существует (status_code: 409)
+2025-03-13 at 04:10 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams
+Метод: POST
+Статус: 409
+Тело ответа: {
+    "detail": "Команда с таким именем уже существует"
+}
+2025-03-13 at 04:13 | INFO | True | True
+2025-03-13 at 04:13 | INFO | Пользователь из Redis
+2025-03-13 at 04:13 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 04:13 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 04:13 | INFO | Поиск одной записи Team по фильтрам: {'id': 22}
+2025-03-13 at 04:13 | INFO | Запись найдена по фильтрам: {'id': 22}
+2025-03-13 at 04:13 | INFO | Поиск одной записи Member по фильтрам: {'user_id': 1, 'team_id': 22}
+2025-03-13 at 04:13 | INFO | Запись найдена по фильтрам: {'user_id': 1, 'team_id': 22}
+2025-03-13 at 04:13 | INFO | Поиск одной записи Member по фильтрам: {'user_id': 1, 'team_id': 22}
+2025-03-13 at 04:13 | INFO | Запись найдена по фильтрам: {'user_id': 1, 'team_id': 22}
+2025-03-13 at 04:13 | INFO | Удаление записей Team по фильтру: {'id': 22}
+2025-03-13 at 04:13 | INFO | Удалено 1 записей.
+2025-03-13 at 04:13 | INFO | Удаление записей Member по фильтру: {'id': 14}
+2025-03-13 at 04:13 | INFO | Удалено 0 записей.
+2025-03-13 at 04:13 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams/22/leave
+Метод: DELETE
+Статус: 200
+Тело ответа: {
+    "status": "Success",
+    "message": "Вы успешно покинули команду и удалили ее"
+}
+2025-03-13 at 04:13 | INFO | True | True
+2025-03-13 at 04:13 | INFO | Пользователь из Redis
+2025-03-13 at 04:13 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 04:13 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 04:13 | INFO | Поиск одной записи Team по фильтрам: {'name': 'Olso'}
+2025-03-13 at 04:13 | INFO | Запись не найдена по фильтрам: {'name': 'Olso'}
+2025-03-13 at 04:13 | INFO | Добавление записи Team с параметрами: {'name': 'Olso', 'is_open': True, 'description': 'Команда разработчиков корпоративных приложений', 'hackathon_id': 2}
+2025-03-13 at 04:13 | INFO | Запись Team успешно добавлена.
+2025-03-13 at 04:13 | INFO | Поиск существующего участника с user_id: 1 и hackathon_id: 2
+2025-03-13 at 04:13 | INFO | Участник с user_id: 1 и hackathon_id: 2 не найден
+2025-03-13 at 04:13 | INFO | Добавление записи Member с параметрами: {'user_id': 1, 'team_id': 23, 'tg_name': 'bomjkee', 'role': 'leader'}
+2025-03-13 at 04:13 | INFO | Запись Member успешно добавлена.
+2025-03-13 at 04:13 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams
+Метод: POST
+Статус: 200
+Тело ответа: {
+    "status": "Success",
+    "message": "Команда была успешно создана"
+}
+2025-03-13 at 04:14 | INFO | True | True
+2025-03-13 at 04:14 | INFO | Пользователь из Redis
+2025-03-13 at 04:14 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 04:14 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 04:14 | INFO | Поиск одной записи Team по фильтрам: {'id': 22}
+2025-03-13 at 04:14 | INFO | Запись не найдена по фильтрам: {'id': 22}
+2025-03-13 at 04:14 | ERROR | Ошибка при выходе из команды: 404: Команда не найдена
+2025-03-13 at 04:14 | WARNING | HTTPException in function: leave_team with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x108d69d60>, 'user': {'id': 1, 'telegram_id': 805550691, 'first_name': '匚ㄥㄖㄩᗪ', 'last_name': '', 'username': 'bomjkee', 'full_name': 'Смирнов Егор Андреевич', 'is_mirea_student': 'True', 'group': 'ВВВВ-81-23', 'last_active': 1741828412.7022731}, 'team_id': 22}
+  - Команда не найдена (status_code: 404)
+2025-03-13 at 04:14 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams/22/leave
+Метод: DELETE
+Статус: 404
+Тело ответа: {
+    "detail": "Команда не найдена"
+}
+2025-03-13 at 04:14 | INFO | True | True
+2025-03-13 at 04:14 | INFO | Пользователь из Redis
+2025-03-13 at 04:14 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 04:14 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 04:14 | INFO | Поиск одной записи Team по фильтрам: {'id': 23}
+2025-03-13 at 04:14 | INFO | Запись найдена по фильтрам: {'id': 23}
+2025-03-13 at 04:14 | INFO | Поиск одной записи Member по фильтрам: {'user_id': 1, 'team_id': 23}
+2025-03-13 at 04:14 | INFO | Запись найдена по фильтрам: {'user_id': 1, 'team_id': 23}
+2025-03-13 at 04:14 | INFO | Поиск одной записи Member по фильтрам: {'user_id': 1, 'team_id': 23}
+2025-03-13 at 04:14 | INFO | Запись найдена по фильтрам: {'user_id': 1, 'team_id': 23}
+2025-03-13 at 04:14 | INFO | Удаление записей Team по фильтру: {'id': 23}
+2025-03-13 at 04:14 | INFO | Удалено 1 записей.
+2025-03-13 at 04:14 | INFO | Удаление записей Member по фильтру: {'id': 15}
+2025-03-13 at 04:14 | INFO | Удалено 0 записей.
+2025-03-13 at 04:14 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams/23/leave
+Метод: DELETE
+Статус: 200
+Тело ответа: {
+    "status": "Success",
+    "message": "Вы успешно покинули команду и удалили ее"
+}
+2025-03-13 at 04:16 | INFO | True | True
+2025-03-13 at 04:16 | INFO | Пользователь из Redis
+2025-03-13 at 04:16 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 04:16 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 04:16 | INFO | Поиск одной записи Team по фильтрам: {'name': 'Olso'}
+2025-03-13 at 04:16 | INFO | Запись не найдена по фильтрам: {'name': 'Olso'}
+2025-03-13 at 04:16 | INFO | Добавление записи Team с параметрами: {'name': 'Olso', 'is_open': True, 'description': 'Команда разработчиков корпоративных приложений', 'hackathon_id': 2}
+2025-03-13 at 04:16 | INFO | Запись Team успешно добавлена.
+2025-03-13 at 04:16 | INFO | Поиск существующего участника с user_id: 1 и hackathon_id: 2
+2025-03-13 at 04:16 | INFO | Участник с user_id: 1 и hackathon_id: 2 не найден
+2025-03-13 at 04:16 | INFO | Добавление записи Member с параметрами: {'user_id': 1, 'team_id': 24, 'tg_name': 'bomjkee', 'role': 'leader'}
+2025-03-13 at 04:16 | INFO | Запись Member успешно добавлена.
+2025-03-13 at 04:16 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams
+Метод: POST
+Статус: 200
+Тело ответа: {
+    "status": "Success",
+    "message": "Команда была успешно создана"
+}
+2025-03-13 at 04:17 | INFO | True | True
+2025-03-13 at 04:17 | INFO | Пользователь из Redis
+2025-03-13 at 04:17 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 04:17 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 04:17 | INFO | Поиск одной записи Team по фильтрам: {'id': 2}
+2025-03-13 at 04:17 | INFO | Запись найдена по фильтрам: {'id': 2}
+2025-03-13 at 04:17 | INFO | Поиск одной записи Member по фильтрам: {'user_id': 1, 'team_id': 2}
+2025-03-13 at 04:17 | INFO | Запись не найдена по фильтрам: {'user_id': 1, 'team_id': 2}
+2025-03-13 at 04:17 | ERROR | Ошибка при обновлении команды: 403: Недостаточно прав
+2025-03-13 at 04:17 | WARNING | HTTPException in function: update_team with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x12817f5c0>, 'user': {'id': 1, 'telegram_id': 805550691, 'first_name': '匚ㄥㄖㄩᗪ', 'last_name': '', 'username': 'bomjkee', 'full_name': 'Смирнов Егор Андреевич', 'is_mirea_student': 'True', 'group': 'ВВВВ-81-23', 'last_active': 1741828615.785273}, 'team_id': 2, 'team': TeamUpdate(name='Olso', is_open=False, description='Команда разработчиков корпоративных приложений')}
+  - Недостаточно прав (status_code: 403)
+2025-03-13 at 04:17 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams/2
+Метод: PUT
+Статус: 403
+Тело ответа: {
+    "detail": "Недостаточно прав"
+}
+2025-03-13 at 04:21 | INFO | True | True
+2025-03-13 at 04:21 | INFO | Пользователь из Redis
+2025-03-13 at 04:21 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 04:21 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 04:21 | INFO | Поиск одной записи Team по фильтрам: {'id': 2}
+2025-03-13 at 04:21 | INFO | Запись найдена по фильтрам: {'id': 2}
+2025-03-13 at 04:21 | INFO | Поиск одной записи Member по фильтрам: {'user_id': 1, 'team_id': 2, 'role': 'leader'}
+2025-03-13 at 04:21 | INFO | Запись не найдена по фильтрам: {'user_id': 1, 'team_id': 2, 'role': 'leader'}
+2025-03-13 at 04:21 | ERROR | Ошибка при обновлении команды: 403: Недостаточно прав
+2025-03-13 at 04:21 | WARNING | HTTPException in function: update_team with args: () and
+kwargs: {'session': <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10f87a7e0>, 'user': {'id': 1, 'telegram_id': 805550691, 'first_name': '匚ㄥㄖㄩᗪ', 'last_name': '', 'username': 'bomjkee', 'full_name': 'Смирнов Егор Андреевич', 'is_mirea_student': 'True', 'group': 'ВВВВ-81-23', 'last_active': 1741828626.050794}, 'team_id': 2, 'team': TeamUpdate(name='Olso', is_open=False, description='Команда разработчиков корпоративных приложений')}
+  - Недостаточно прав (status_code: 403)
+2025-03-13 at 04:21 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams/2
+Метод: PUT
+Статус: 403
+Тело ответа: {
+    "detail": "Недостаточно прав"
+}
+2025-03-13 at 04:22 | INFO | True | True
+2025-03-13 at 04:22 | INFO | Пользователь из Redis
+2025-03-13 at 04:22 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 04:22 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 04:22 | INFO | Поиск одной записи Team по фильтрам: {'id': 24}
+2025-03-13 at 04:22 | INFO | Запись найдена по фильтрам: {'id': 24}
+2025-03-13 at 04:22 | INFO | Поиск одной записи Member по фильтрам: {'user_id': 1, 'team_id': 24, 'role': 'leader'}
+2025-03-13 at 04:22 | INFO | Запись найдена по фильтрам: {'user_id': 1, 'team_id': 24, 'role': 'leader'}
+2025-03-13 at 04:22 | INFO | Обновление записей Team по фильтру: {'id': 24} с параметрами: {'name': 'Olso', 'is_open': False, 'description': 'Команда разработчиков корпоративных приложений'}
+2025-03-13 at 04:22 | INFO | Обновлено 1 записей.
+2025-03-13 at 04:22 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams/24
+Метод: PUT
+Статус: 200
+Тело ответа: {
+    "status": "Success",
+    "message": "Команда успешно обновлена"
+}
+2025-03-13 at 04:22 | INFO | True | True
+2025-03-13 at 04:22 | INFO | Пользователь из Redis
+2025-03-13 at 04:22 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 04:22 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 04:22 | INFO | Поиск одной записи Team по фильтрам: {'id': 24}
+2025-03-13 at 04:22 | INFO | Запись найдена по фильтрам: {'id': 24}
+2025-03-13 at 04:22 | INFO | Поиск одной записи Member по фильтрам: {'user_id': 1, 'team_id': 24, 'role': 'leader'}
+2025-03-13 at 04:22 | INFO | Запись найдена по фильтрам: {'user_id': 1, 'team_id': 24, 'role': 'leader'}
+2025-03-13 at 04:22 | INFO | Обновление записей Team по фильтру: {'id': 24} с параметрами: {'name': 'Olso', 'is_open': False, 'description': 'Команда разработчиков корпоративных приложений'}
+2025-03-13 at 04:22 | INFO | Обновлено 1 записей.
+2025-03-13 at 04:22 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams/24
+Метод: PUT
+Статус: 200
+Тело ответа: {
+    "status": "Success",
+    "message": "Команда успешно обновлена"
+}
+2025-03-13 at 04:29 | INFO | True | True
+2025-03-13 at 04:29 | INFO | Пользователь из Redis
+2025-03-13 at 04:29 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 04:29 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 04:29 | INFO | Поиск одной записи Team по фильтрам: {'id': 1}
+2025-03-13 at 04:29 | INFO | Запись найдена по фильтрам: {'id': 1}
+2025-03-13 at 04:29 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams/1/join
+Метод: POST
+Статус: 200
+Тело ответа: {
+    "status": "Success",
+    "message": "Вы успешно присоединились к команде"
+}
+2025-03-13 at 04:30 | INFO | True | True
+2025-03-13 at 04:30 | INFO | Пользователь из Redis
+2025-03-13 at 04:30 | INFO | Обновление в Redis последней активности пользователя None
+2025-03-13 at 04:30 | INFO | Аутентификация пользователя bomjkee
+2025-03-13 at 04:30 | INFO | Поиск одной записи Team по фильтрам: {'id': 24}
+2025-03-13 at 04:30 | INFO | Запись найдена по фильтрам: {'id': 24}
+2025-03-13 at 04:30 | INFO | Поиск одной записи Member по фильтрам: {'user_id': 1, 'team_id': 24}
+2025-03-13 at 04:30 | INFO | Запись найдена по фильтрам: {'user_id': 1, 'team_id': 24}
+2025-03-13 at 04:30 | INFO | Удаление записей Team по фильтру: {'id': 24}
+2025-03-13 at 04:30 | INFO | Удалено 1 записей.
+2025-03-13 at 04:30 | INFO | Удаление записей Member по фильтру: {'id': 16}
+2025-03-13 at 04:30 | INFO | Удалено 0 записей.
+2025-03-13 at 04:30 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams/24/leave
+Метод: DELETE
+Статус: 200
+Тело ответа: {
+    "status": "Success",
+    "message": "Вы успешно покинули команду и удалили ее"
+}
+2025-03-13 at 04:31 | INFO | Поиск всех записей Team по фильтрам: {}
+2025-03-13 at 04:31 | INFO | Найдено 5 записей.
+2025-03-13 at 04:31 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams
+Метод: GET
+Статус: 200
+Тело ответа: [
+    {
+        "id": 1,
+        "name": "Нейросети будущего",
+        "is_open": true,
+        "description": "Разработка передовых решений на базе ИИ для лучшего будущего.",
+        "hackathon_id": 1
+    },
+    {
+        "id": 2,
+        "name": "Кодовые ниндзя",
+        "is_open": false,
+        "description": "Команда по спортивному программированию, готовая к любым вызовам!",
+        "hackathon_id": 2
+    },
+    {
+        "id": 3,
+        "name": "Аналитики данных",
+        "is_open": true,
+        "description": "Раскрываем силу данных с помощью анализа и визуализации",
+        "hackathon_id": 1
+    },
+    {
+        "id": 4,
+        "name": "Веб-воины",
+        "is_open": true,
+        "description": "Создаем инновационные и удобные веб-приложения",
+        "hackathon_id": 3
+    },
+    {
+        "id": 5,
+        "name": "Кибер-защитники",
+        "is_open": false,
+        "description": "Защищаем цифровые активы и обеспечиваем кибербезопасность",
+        "hackathon_id": 2
+    }
+]
+2025-03-13 at 04:31 | INFO | Команды из Redis
+2025-03-13 at 04:31 | INFO | 
+
+URL: https://0c39-185-234-67-249.ngrok-free.app/teams
+Метод: GET
+Статус: 200
+Тело ответа: [
+    {
+        "id": 1,
+        "name": "Нейросети будущего",
+        "is_open": true,
+        "description": "Разработка передовых решений на базе ИИ для лучшего будущего.",
+        "hackathon_id": 1
+    },
+    {
+        "id": 2,
+        "name": "Кодовые ниндзя",
+        "is_open": false,
+        "description": "Команда по спортивному программированию, готовая к любым вызовам!",
+        "hackathon_id": 2
+    },
+    {
+        "id": 3,
+        "name": "Аналитики данных",
+        "is_open": true,
+        "description": "Раскрываем силу данных с помощью анализа и визуализации",
+        "hackathon_id": 1
+    },
+    {
+        "id": 4,
+        "name": "Веб-воины",
+        "is_open": true,
+        "description": "Создаем инновационные и удобные веб-приложения",
+        "hackathon_id": 3
+    },
+    {
+        "id": 5,
+        "name": "Кибер-защитники",
+        "is_open": false,
+        "description": "Защищаем цифровые активы и обеспечиваем кибербезопасность",
+        "hackathon_id": 2
+    }
+]

@@ -8,7 +8,7 @@ from app.db.dao import HackathonDAO
 from app.db.session_maker import db
 from app.api.utils.auth_dep import fast_auth_user
 from app.api.utils.api_utils import exception_handler
-from app.api.utils.redis_operations import convert_redis_data
+from app.api.utils.redis_operations import convert_redis_data, get_hackathon_by_id_from_redis
 from app.api.typization.responses import SHackathonInfo, SHackathons, SUser, ErrorResponse
 from app.api.typization.schemas import IdModel
 from app.api.typization.exceptions import HackathonNotFoundException, HackathonsNotFoundException, UserNotFoundException
@@ -54,30 +54,9 @@ async def get_all_hackathons(session: AsyncSession = Depends(db.get_db)) -> List
 @exception_handler
 async def get_hackathon_by_id(hackathon_id: int, session: AsyncSession = Depends(db.get_db)) -> SHackathonInfo:
     """Получает информацию о хакатоне."""
-
-    hackathon_cache_key = f"hackathon:{hackathon_id}"
-
     try:
-        cached_team_data = await redis.get(hackathon_cache_key)
-
-        if cached_team_data:
-            hackathon_data = json.loads(cached_team_data)
-            logger.info(f"Хакатон из Redis: {hackathon_data}")
-
-            return SHackathonInfo(**convert_redis_data(hackathon_data))
-
-        else:
-            hackathon_data = await HackathonDAO.find_one_or_none(session=session, filters=IdModel(id=hackathon_id))
-            if hackathon_data is None:
-                raise HackathonNotFoundException
-
-            hackathon = SHackathonInfo(**hackathon_data.to_dict())
-
-            await redis.set(hackathon_cache_key, json.dumps(hackathon.model_dump()))
-            await redis.expire(hackathon_cache_key, 3600)  # TTL = 1 час
-
-            return hackathon
-
+        hackathon = await get_hackathon_by_id_from_redis(session=session, hackathon_id=hackathon_id)
+        return hackathon
     except Exception as e:
         logger.error(f"Ошибка при получении информации о хакатоне: {e}")
         raise
