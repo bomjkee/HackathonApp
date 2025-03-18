@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import Integer, BigInteger, ForeignKey, String
+from sqlalchemy import Integer, BigInteger, ForeignKey
 from datetime import datetime
 from typing import List
 from app.db.database import Base
@@ -11,15 +11,11 @@ class User(Base):
     username: Mapped[str]
     first_name: Mapped[str | None]
     last_name: Mapped[str | None]
-
     photo_url: Mapped[str | None]
-    auth_date: Mapped[datetime | None]
-
 
     full_name: Mapped[str | None]
     is_mirea_student: Mapped[bool | None]
     group: Mapped[str | None]
-
 
     members: Mapped[List["Member"]] = relationship("Member", back_populates="user")
     invites: Mapped[List["Invite"]] = relationship("Invite", back_populates="user")
@@ -48,7 +44,7 @@ class Hackathon(Base):
 
 
 class Member(Base):
-    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"))
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.telegram_id"))
     team_id: Mapped[int] = mapped_column(Integer, ForeignKey("teams.id", ondelete="CASCADE"))
     tg_name: Mapped[str]
     role: Mapped[str]
@@ -59,7 +55,7 @@ class Member(Base):
 
 class Invite(Base):
     team_id: Mapped[int] = mapped_column(Integer, ForeignKey("teams.id", ondelete="CASCADE"))
-    invite_user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"))
+    invite_user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.telegram_id", ondelete="CASCADE"))
 
     team: Mapped["Team"] = relationship("Team", back_populates="invites")
     user: Mapped["User"] = relationship("User", back_populates="invites")

@@ -1,7 +1,8 @@
-from datetime import datetime
-from typing import List, Dict, Optional, Any
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from typing import List, TypeVar
+from pydantic import BaseModel, Field
 
+
+T = TypeVar(name="T", bound=BaseModel)
 
 class SUser(BaseModel):
     id: int = Field(..., description="ID пользователя")
@@ -14,20 +15,25 @@ class SUser(BaseModel):
     is_mirea_student: bool | None = Field(None, description="Является ли пользователь студентом МИРЭА")
     group: str | None = Field(None, description="Учебная группа пользователя")
 
-    last_active: int | None = Field(None, description="Время последней активности пользователя")
 
 
 class SUserInfo(BaseModel):
-    id: int = Field(..., description="ID пользователя")
     username: str | None = Field(None, description="Tg username пользователя")
     first_name: str | None = Field(None, description="Tg first name пользователя")
     last_name: str | None = Field(None, description="Tg last name пользователя")
+
+
+
+class SUserCheckRegistration(BaseModel):
+    is_registered: bool = Field(False, description="Зарегистрирован ли пользователь в MiniApp")
+
 
 
 class SHackathons(BaseModel):
     id: int = Field(..., description="ID хакатона")
     name: str = Field(..., description="Название хакатона")
     start_description: str = Field(..., description="Вступительное описание")
+
 
 
 class SHackathonInfo(BaseModel):
@@ -40,6 +46,7 @@ class SHackathonInfo(BaseModel):
     end_date: int | None = Field(None, description="Дата окончания")
 
 
+
 class STeam(BaseModel):
     id: int = Field(..., description="ID команды")
     name: str = Field(..., description="Название команды")
@@ -48,9 +55,11 @@ class STeam(BaseModel):
     hackathon_id: int = Field(..., description="ID хакатона")
 
 
+
 class ProfileInfo(BaseModel):
     user: SUserInfo = Field(..., description="Информация о пользователе")
-    team: STeam | None = Field(None, description="Информация о команде")
+    team: List[STeam] | None = Field(None, description="Информация о команде")
+
 
 
 class SMember(BaseModel):
@@ -61,9 +70,11 @@ class SMember(BaseModel):
     role: str = Field(..., description="Роль участника")
 
 
+
 class STeamWithMembers(BaseModel):
     team: STeam = Field(..., description="Текущая команда")
     members: List[SMember] = Field(..., description="Участники команды")
+
 
 
 class SInvite(BaseModel):
@@ -71,15 +82,18 @@ class SInvite(BaseModel):
     invite_user_id: int = Field(..., description="ID приглашаемого пользователя")
     team_id: int = Field(..., description="ID команды")
 
-class SUserCheckRegistration(BaseModel):
-    is_registered: bool = Field(False, description="Зарегистрирован ли пользователь в MiniApp")
+
 
 class SuccessResponse(BaseModel):
     status: str = Field("Success", description="Статус ответа")
     message: str = Field(..., description="Сообщение")
 
+
+
 class Error(BaseModel):
-    error: str = Field(..., description="Ошибка")
+    code: str = Field(..., description="Код ошибки")
+    message: str = Field(..., description="Сообщение об ошибке")
+
 
 class ErrorResponse(BaseModel):
     status: str = Field(..., description="Статус ответа")

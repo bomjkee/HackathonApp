@@ -1,12 +1,4 @@
-from datetime import datetime
-from typing import List, Dict, Optional
 from pydantic import BaseModel, ConfigDict, Field, validator, field_validator
-
-
-class TelegramIDModel(BaseModel):
-    telegram_id: int = Field(..., description="Telegram ID")
-
-    model_config = ConfigDict(from_attributes=True)
 
 
 class IdModel(BaseModel):
@@ -15,6 +7,16 @@ class IdModel(BaseModel):
 
 class NameModel(BaseModel):
     name: str = Field(..., description="Имя объекта")
+
+
+class HackathonIDModel(BaseModel):
+    hackathon_id: int = Field(..., description="ID хакатона")
+
+
+class TelegramIDModel(BaseModel):
+    telegram_id: int = Field(..., description="Telegram ID")
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UserInfoFromBot(TelegramIDModel):
@@ -57,14 +59,16 @@ class MemberCreate(BaseModel):
 
 
 class MemberFind(BaseModel):
-    user_id: int | None= Field(None, description="ID пользователя")
-    team_id: int = Field(..., description="ID команды")
+    id: int | None = Field(None, description="Id приглашения")
+    user_id: int | None = Field(None, description="ID пользователя")
+    team_id: int | None = Field(None, description="ID команды")
+    tg_name: str | None = Field(None, description="Tg username пользователя")
     role: str | None = Field(None, description="Роль участника")
-    hackathon_id: int | None = Field(None, description="ID хакатона")
 
 
 class InviteFilter(BaseModel):
     invite_user_id: int = Field(..., description="ID приглашаемого пользователя")
+
 
 class InviteCreate(BaseModel):
     invite_user_id: int = Field(..., description="ID приглашаемого пользователя")

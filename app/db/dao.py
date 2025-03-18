@@ -1,12 +1,11 @@
-from datetime import datetime, UTC, timedelta
-from typing import Optional, List, Dict
-
+from typing import List
 from loguru import logger
-from sqlalchemy import select, func, case
+from pydantic import BaseModel
+from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
 
+from app.api.typization.schemas import HackathonIDModel
 from app.db.base import BaseDAO
 from app.db.models import User, Team, Hackathon, Member, Invite
 
@@ -14,14 +13,14 @@ from app.db.models import User, Team, Hackathon, Member, Invite
 class UserDAO(BaseDAO[User]):
     model = User
 
-    async def get_user_id(cls, session: AsyncSession, telegram_id: int) -> int | None:
+    async def get_user_id(self, telegram_id: int) -> int | None:
         """
         Получает ID пользователя по его Telegram ID.
         """
         logger.info(f"Получение user_id по telegram_id: {telegram_id}")
         try:
-            query = select(cls.model.id).filter_by(telegram_id=telegram_id)
-            result = await session.execute(query)
+            query = select(self.model.id).filter_by(telegram_id=telegram_id)
+            result = await self._session.execute(query)
             user_id = result.scalar_one_or_none()
             if user_id:
                 logger.info(f"Найден user_id: {user_id} для telegram_id: {telegram_id}")
@@ -36,44 +35,26 @@ class UserDAO(BaseDAO[User]):
 class TeamDAO(BaseDAO[Team]):
     model = Team
 
-    @classmethod
-    async def find_all_by_hackathon_id(cls, session: AsyncSession, hackathon_id: int) -> List[Team]:
-        """
-        Получает список всех команд, принадлежащих к определенному хакатону.
-        """
-        logger.info(f"Поиск всех команд для hackathon_id: {hackathon_id}")
-        try:
-            query = select(cls.model).where(cls.model.hackathon_id == hackathon_id)
-            result = await session.execute(query)
-            teams = result.scalars().all()
-            logger.info(f"Найдено {len(teams)} команд для hackathon_id: {hackathon_id}")
-            return teams
-        except SQLAlchemyError as e:
-            logger.error(f"Ошибка при поиске команд для hackathon_id {hackathon_id}: {e}")
-            raise
-
-
-    @classmethod
-    async def find_team_with_members_by_user_id(cls, session: AsyncSession, user_id: int) -> Team | None:
+    async def find_all_teams_by_user_id(self, user_id: int):
         """
         Находит команду (и ее участников), в которой состоит пользователь с указанным ID.
         """
         try:
             query = (
-                select(Team)
-                .join(Member, Team.id == Member.team_id)
+                select(self.model)
+                .join(Member, self.model.id == Member.team_id)
                 .where(Member.user_id == user_id)
             )
 
-            result = await session.execute(query)
-            team = result.scalar_one_or_none()
+            result = await self._session.execute(query)
+            teams = result.scalars().all()
 
-            if team:
-                logger.info(f"Команда найдена для user ID {user_id}: {team.name}")
+            if len(teams) > 0:
+                logger.info(f"Команды найдены для пользователя c ID {user_id}: {teams}")
             else:
-                logger.info(f"Команда не найдена для user ID {user_id}")
+                logger.info(f"Команды не найдены для пользователя user ID {user_id}")
 
-            return team
+            return teams
 
         except SQLAlchemyError as e:
             logger.error(f"Ошибка при поиске команды с участниками для user ID {user_id}: {e}")
@@ -87,30 +68,18 @@ class HackathonDAO(BaseDAO[Hackathon]):
 class MemberDAO(BaseDAO[Member]):
     model = Member
 
-    @classmethod
-    async def find_all_by_team_id(cls, team_id: int, session: AsyncSession) -> List[Member]:
-        try:
-            logger.info(f"Поиск всех участников для team_id: {team_id}")
-            query = select(cls.model).where(cls.model.team_id == team_id)
-            result = await session.execute(query)
-            members = result.scalars().all()
-            logger.info(f"Найдено {len(members)} участников для team_id: {team_id}")
-            return members
-        except SQLAlchemyError as e:
-            logger.error(f"Ошибка при поиске участников для team_id {team_id}: {e}")
-            raise
-
-
-    @classmethod
-    async def find_existing_member(cls, session: AsyncSession, user_id: int, hackathon_id: int):
+    async def find_existing_member(self, user_id: int, hackathon_id: int):
         try:
             logger.info(f"Поиск существующего участника с user_id: {user_id} и hackathon_id: {hackathon_id}")
-            result = await session.execute(
-                select(cls.model)
-                .join(Team, Member.team_id == Team.id)
-                .where(cls.model.user_id == user_id, Team.hackathon_id == hackathon_id)
+            query = (
+                select(self.model)
+                .join(Team, self.model.team_id == Team.id)
+                .where(self.model.user_id == user_id, Team.hackathon_id == hackathon_id)
             )
+
+            result = await self._session.execute(query)
             member = result.scalars().first()
+
             if member:
                 logger.info(f"Найден участник с user_id: {user_id} и hackathon_id: {hackathon_id}")
             else:
@@ -121,7 +90,27 @@ class MemberDAO(BaseDAO[Member]):
             raise
 
 
+    async def find_members_by_hackathon(self, filters: HackathonIDModel):
+        try:
+            hackathon_id = filters.model_dump(exclude_unset=True)
+            logger.info(f"Поиск существующих участников для hackathon_id: {hackathon_id}")
+            query = (
+                select(self.model)
+                .join(Team, self.model.team_id == Team.id)
+                .where(Team.hackathon_id == hackathon_id)
+            )
 
+            result = await self._session.execute(query)
+            members = result.scalars().all()
+
+            if members:
+                logger.info(f"Найдены участники для hackathon_id: {hackathon_id}")
+            else:
+                logger.info(f"Участники для hackathon_id: {hackathon_id} не найдены")
+            return members
+        except SQLAlchemyError as e:
+            logger.error(f"Ошибка при поиске участника для hackathon_id {hackathon_id}: {e}")
+            raise
 
 
 class InviteDAO(BaseDAO[Invite]):

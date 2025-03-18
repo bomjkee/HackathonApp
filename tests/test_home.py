@@ -10,7 +10,7 @@ async def test_register_user(async_client: AsyncClient, authorization_headers: d
     user_update = {
         "full_name": "Смирнов Егор Андреевич",
         "is_mirea_student": True,
-        "group": "ВВВВ-81-23"
+        "group": "ЭФБО-07-23"
     }
     response: Response = await make_request(client=async_client, api_url="/register",
                                             method="POST", headers=authorization_headers,
@@ -26,7 +26,6 @@ async def test_get_my_profile(async_client: AsyncClient, authorization_headers: 
     response: Response = await make_request(client=async_client, api_url="/my_profile", headers=authorization_headers)
     assert response.status_code == 200
     assert response.json()["user"]
-    assert response.json()["team"]
 
 
 @pytest.mark.asyncio

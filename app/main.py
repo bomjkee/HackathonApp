@@ -1,19 +1,16 @@
-from loguru import logger
+from contextlib import asynccontextmanager
 
+from aiogram.exceptions import TelegramBadRequest
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from aiogram.types import Update
 from uvicorn_worker import UvicornWorker
 
+from app.redis.redis_client import redis_client
 from app.api.routers import home, hackathon, team
 from app.api.utils.api_utils import exception_handler
-from fastapi.middleware.cors import CORSMiddleware
-from contextlib import asynccontextmanager
-from fastapi.staticfiles import StaticFiles
-from aiogram.types import Update
-
-from config import dp, bot, settings, front_site_url
-from app.bot.handlers import user, admin, invite
 from app.bot.main import start_bot, stop_bot
-from app.db.database_middleware import DatabaseMiddlewareWithoutCommit, DatabaseMiddlewareWithCommit
+from config import bot, logger, front_site_url, dp, settings
 
 
 class CustomUvicornWorker(UvicornWorker):
@@ -25,15 +22,8 @@ class CustomUvicornWorker(UvicornWorker):
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info("Бот настраивается...")
 
-    dp.update.middleware.register(DatabaseMiddlewareWithoutCommit())
-    dp.update.middleware.register(DatabaseMiddlewareWithCommit())
-
-    dp.include_router(user.router)
-    dp.include_router(invite.router)
-    dp.include_router(admin.router)
-
+    await redis_client.connect()
     await start_bot()
 
     webhook_url = settings.get_webhook_url()
@@ -48,34 +38,46 @@ async def lifespan(app: FastAPI):
     await bot.delete_webhook(drop_pending_updates=True)
     logger.info("Вебхук удален")
     await stop_bot()
-    logger.info("Бот завершает работу")
+    await redis_client.close()
 
 
-app = FastAPI(lifespan=lifespan)
+def create_app() -> FastAPI:
 
-origins = [
-    "http://localhost:5173",
-    front_site_url
-]
+    app = FastAPI(lifespan=lifespan)
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+    origins = [
+        "http://localhost:5173",
+        front_site_url
+    ]
 
-app.add_exception_handler(Exception, exception_handler)
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
+    app.add_exception_handler(Exception, exception_handler)
+
+    app.include_router(home.router)
+    app.include_router(hackathon.router)
+    app.include_router(team.router)
+    logger.info("Приложение собрано и готово к работе")
+    return app
+
+
+app = create_app()
+
 
 @app.post("/webhook")
 async def webhook(request: Request) -> None:
     """Устанавливает вебхук для получения обновлений от телеграма"""
-    logger.info("Обработка обновления...")
-    update = Update.model_validate(await request.json(), context={"bot": bot})
-    await dp.feed_update(bot, update)
-    logger.info("Обновление обработано")
+    try:
+        logger.info("Обработка обновления...")
+        update = Update.model_validate(await request.json(), context={"bot": bot})
+        await dp.feed_update(bot, update)
+        logger.info("Обновление обработано")
+    except TelegramBadRequest:
+        raise
 
-app.include_router(home.router)
-app.include_router(hackathon.router)
-app.include_router(team.router)

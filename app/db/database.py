@@ -5,7 +5,6 @@ from sqlalchemy import func, TIMESTAMP, Integer, inspect
 from sqlalchemy.orm import DeclarativeBase, declared_attr, mapped_column, Mapped
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncAttrs, AsyncSession
 
-
 from config import db_url
 
 

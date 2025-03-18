@@ -25,10 +25,10 @@ async def test_get_team_by_id(async_client: AsyncClient):
 @pytest.mark.asyncio
 async def test_create_team(async_client: AsyncClient, authorization_headers: dict):
     team_create = {
-        "name": "Olso",
+        "name": "Olsos",
         "is_open": True,
         "description": "Команда разработчиков корпоративных приложений",
-        "hackathon_id": 2
+        "hackathon_id": 1
     }
     response: Response = await make_request(client=async_client, api_url="/teams",
                                             method="POST", headers=authorization_headers, data=team_create)
@@ -45,28 +45,28 @@ async def test_invite_user_to_team(async_client: AsyncClient, authorization_head
     response: Response = await make_request(client=async_client, api_url="/teams/invite",
                                             method="POST", headers=authorization_headers, data=invite_create)
     assert response.status_code == 200
-    assert response.json()["result"] == "Success"
+    assert response.json()["status"] == "Success"
 
 
 @pytest.mark.asyncio
 async def test_join_to_team(async_client: AsyncClient, authorization_headers: dict):
-    response: Response = await make_request(client=async_client, api_url="/teams/1/join",
+    response: Response = await make_request(client=async_client, api_url="/teams/3/join",
                                             method="POST", headers=authorization_headers)
     assert response.status_code == 200
     assert response.json()["status"] == "Success"
 
 
 
-# PUT запросы
+# PATCH запросы
 @pytest.mark.asyncio
 async def test_update_team(async_client: AsyncClient, authorization_headers: dict):
     team_update = {
         "name": "Olso",
-        "is_open": False,
+        "is_open": True,
         "description": "Команда разработчиков корпоративных приложений"
     }
     response: Response = await make_request(client=async_client, api_url="/teams/24",
-                                            method="PUT", headers=authorization_headers, data=team_update)
+                                            method="PATCH", headers=authorization_headers, data=team_update)
     assert response.status_code == 200
     assert response.json()["status"] == "Success"
 
@@ -75,7 +75,7 @@ async def test_update_team(async_client: AsyncClient, authorization_headers: dic
 # DELETE запросы
 @pytest.mark.asyncio
 async def test_leave_team(async_client: AsyncClient, authorization_headers: dict):
-    response: Response = await make_request(client=async_client, api_url="/teams/24/leave",
+    response: Response = await make_request(client=async_client, api_url="/teams/25/leave",
                                             method="DELETE", headers=authorization_headers)
     assert response.status_code == 200
     assert response.json()["status"] == "Success"
@@ -83,7 +83,7 @@ async def test_leave_team(async_client: AsyncClient, authorization_headers: dict
 
 @pytest.mark.asyncio
 async def test_delete_team(async_client: AsyncClient, authorization_headers: dict):
-    response: Response = await make_request(client=async_client, api_url="/teams/21",
+    response: Response = await make_request(client=async_client, api_url="/teams/25",
                                             method="DELETE", headers=authorization_headers)
     assert response.status_code == 200
     assert response.json()["status"] == "Success"

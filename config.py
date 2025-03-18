@@ -1,29 +1,26 @@
 import os
 from typing import List
-from redis.asyncio import Redis
+from loguru import logger
 from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.client.default import DefaultBotProperties
 from pydantic_settings import BaseSettings, SettingsConfigDict
-# from apscheduler.jobstores.redis import RedisJobStore
-# from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from loguru import logger
+
 
 class Settings(BaseSettings):
     BOT_TOKEN: str
-    ADMINS_ID: List[int]
 
-    DB_URL: str
+    ADMINS_ID: List[int]
 
     BASE_SITE: str
     FRONT_SITE: str
 
-    FORMAT_LOG: str
-    LOG_ROTATION: str
-
-    SECRET_KEY: str
-    ALGORITHM: str
+    DB_LOGIN: str
+    DB_PASSWORD: str
+    DB_HOST: str
+    DB_PORT: int
+    DB_NAME: str
 
     REDIS_HOST: str
     REDIS_PORT: int
@@ -34,12 +31,18 @@ class Settings(BaseSettings):
 
     TMA: str
 
+    FORMAT_LOG: str = "{time:YYYY-MM-DD at HH:mm} | {level} | {message}"
+    LOG_ROTATION: str = "10 MB"
+
     model_config = SettingsConfigDict(
         env_file=os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
     )
 
     def get_webhook_url(self) -> str:
         return f"{self.BASE_SITE}/webhook"
+
+    def get_db_url(self) -> str:
+        return f"postgresql+asyncpg://{self.DB_LOGIN}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
 
     def get_redis_url(self) -> str:
         return f"redis://{self.REDIS_HOST}:{self.REDIS_PORT}/{self.REDIS_DB}"
@@ -55,8 +58,7 @@ admins = settings.ADMINS_ID
 front_site_url = settings.FRONT_SITE
 base_site_url = settings.BASE_SITE
 
-db_url = settings.DB_URL
-redis = Redis.from_url(url=settings.get_redis_url(), socket_timeout=20)
+db_url = settings.get_db_url()
 
 log_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "log.txt")
 logger.add(log_file_path, format=settings.FORMAT_LOG, level="INFO", rotation=settings.LOG_ROTATION)

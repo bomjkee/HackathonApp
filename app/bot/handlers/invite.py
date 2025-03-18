@@ -1,120 +1,194 @@
+import asyncio
 import json
+
+from loguru import logger
 from aiogram import F, Router
-from aiogram.filters import CommandStart, Command
-from aiogram.types import Message, CallbackQuery
-from fastapi import Depends
+from aiogram.types import CallbackQuery
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.typization.exceptions import TeamNotFoundException, InvitationNotFoundException, \
-    MaxTeamMembersExceededException, ForbiddenException, UserNotRegisteredForHackathon, HackathonNotFoundException
-from app.api.typization.responses import SMember, SInvite, STeam, SHackathonInfo
-from app.api.typization.schemas import TelegramIDModel, UserInfoFromBot, IdModel, InviteFilter, MemberFind
-from app.api.utils.redis_operations import convert_redis_data, get_hackathon_by_id_from_redis, \
-    get_team_by_id_from_redis, get_invite_by_id_from_redis
-from app.bot.keyboards.user_keyboards import main_keyboard, back_keyboard, invite_keyboard
-from app.db.dao import UserDAO, MemberDAO, TeamDAO, HackathonDAO, InviteDAO
-from app.db.session_maker import db
-from config import bot, redis, logger
+from app.redis.custom_redis import CustomRedis
+from app.redis.redis_client import redis_client
+from app.redis.redis_operations.hackathon import get_hackathon_data
+from app.redis.redis_operations.invite import get_all_invites_user_data, get_invite_data_by_id, \
+    invalidate_invite_cache
+from app.redis.redis_operations.member import find_existing_member_by_hackathon, count_members_in_team, \
+    invalidate_member_cache
+from app.redis.redis_operations.team import get_team_data
+from app.redis.redis_operations.user import redis_user_data, invalidate_user_cache
+from app.api.typization.bot_exceptions import TeamNotFoundException, InvitationNotFoundException, \
+    MaxTeamMembersExceededException, HackathonNotFoundException, \
+    MemberInTeamAlreadyExistsException, UserNotRegisteredForApp, UserNotFoundException
+from app.api.typization.schemas import MemberCreate
+from app.api.utils.api_utils import check_registration_for_app
+from app.bot.keyboards.user_keyboards import main_keyboard, invite_keyboard
+from app.bot.utils.bot_utils import send_message_to_leader, send_edit_message, delete_message, clear_message_and_answer
+from app.db.dao import MemberDAO, InviteDAO
 
 router = Router()
 
 
 @router.callback_query(F.data == "invites")
 async def get_invites(call: CallbackQuery, session_without_commit: AsyncSession) -> None:
-    user_id = call.from_user.id
-    invites_data = await InviteDAO.find_all(session=session_without_commit, filters=InviteFilter(invite_user_id=user_id))
-    if not invites_data:
-        await call.message.edit_text("На данный момент нет приглашений в команду", reply_markup=main_keyboard(user_id=user_id))
-        return
+    try:
+        redis: CustomRedis = redis_client.get_client()
 
-    for invite in invites_data:
-        team = await get_team_by_id_from_redis(session=session_without_commit, team_id=invite.team_id)
-        await call.message.answer(f"Приглашение в команду {team.name}\nОписание команды: {team.description}", reply_markup=invite_keyboard(invite_id=invite.id))
-    await call.message.answer("Вы вернулись в главное меню", reply_markup=main_keyboard(user_id=user_id))
+        invites_data = await get_all_invites_user_data(redis=redis,
+                                                       session=session_without_commit,
+                                                       invite_user_tg_id=call.from_user.id)
+
+        if not invites_data:
+            await send_edit_message(call=call, message="На данный момент нет приглашений в команду",
+                                    keyboard=main_keyboard(user_id=call.from_user.id))
+            return
+
+        await delete_message(call=call)
+
+        for invite in invites_data:
+
+            team = await get_team_data(redis=redis, session=session_without_commit, team_id=invite.team_id)
+
+            if team:
+                message = await call.message.answer(f"Приглашение в команду {team.name}\nОписание команды: {team.description}",
+                                          reply_markup=invite_keyboard(invite_id=invite.id))
+                await redis.set_value_with_ttl(f"invite_message_process:{invite.id}", value=str(message.message_id))
+                await asyncio.sleep(0.5)
+        await call.message.answer("Вы вернулись в главное меню", reply_markup=main_keyboard(user_id=call.from_user.id))
+
+    except Exception as e:
+        logger.error(f"Ошибка при получении приглашений в команду: {e}")
+        raise
 
 
 @router.callback_query(F.data.startswith("accept_invite_"))
 async def accept_invite(call: CallbackQuery, session_with_commit: AsyncSession) -> None:
+
+    message = ""
+    invite_id = int(call.data.split("_")[-1])
+    user_id = call.from_user.id
+
     try:
-        _, __, invite_id = call.data.split("_")
-        user_id = call.from_user.id
+        redis: CustomRedis = redis_client.get_client()
 
-        invite = await get_invite_by_id_from_redis(session=session_with_commit, invite_id=int(invite_id))
-        team = await get_team_by_id_from_redis(session=session_with_commit, team_id=invite.team_id)
-        hackathon = await get_hackathon_by_id_from_redis(session=session_with_commit, hackathon_id=team.hackathon_id)
+        invite = await get_invite_data_by_id(redis=redis, session=session_with_commit, invite_id=int(invite_id))
+        if not invite:
+            raise InvitationNotFoundException(invite_id=invite_id)
 
-        members_count = await MemberDAO.count(session=session_with_commit, filters=MemberFind(team_id=team.id))
+        existing_user = await redis_user_data(tg_id=user_id)
+        if not existing_user:
+            raise UserNotFoundException(user_id=user_id)
 
-        if members_count >= hackathon.max_members:
-            raise MaxTeamMembersExceededException
+        is_registered = check_registration_for_app(existing_user)
+        if not is_registered:
+            raise UserNotRegisteredForApp(user_id=user_id)
 
-        await MemberDAO.add(session=session_with_commit,
-                            values=MemberFind(user_id=user_id, team_id=team.id))
 
-        await InviteDAO.delete(session=session_with_commit, filters=invite)
+        team = await get_team_data(redis=redis, session=session_with_commit, team_id=invite.team_id)
+        if not team:
+            raise TeamNotFoundException(team_id=invite.team_id)
 
-        invite_key = f"invite:{invite_id}"
-        await redis.delete(invite_key)
+        hackathon = await get_hackathon_data(redis=redis, session=session_with_commit, hackathon_id=team.hackathon_id)
+        if not hackathon:
+            raise HackathonNotFoundException(hackathon_id=team.hackathon_id)
 
-        team_cache_key = f"team:{team.id}"
-        await redis.delete(team_cache_key)
+        existing_member = await find_existing_member_by_hackathon(
+            redis=redis,
+            session=session_with_commit,
+            hackathon_id=hackathon.id,
+            user_id=user_id
+        )
+        if existing_member:
+            raise MemberInTeamAlreadyExistsException()
 
-        await call.message.edit_text("Приглашение принято успешно")
 
-        leader = await MemberDAO.find_one_or_none(session=session_with_commit, filters=MemberFind(team_id=team.id, user_id=user_id, role="leader"))
-        if leader:
-            leader_user = await UserDAO.find_one_or_none(session=session_with_commit, filters=IdModel(id=user_id))
-            if leader_user:
-                await bot.send_message(leader_user.telegram_id,
-                                       f"Пользователь {call.from_user.full_name} (@{call.from_user.username}) принял приглашение в вашу команду!",
-                                       reply_markup=main_keyboard(user_id=leader_user.telegram_id))
+        members_count = await count_members_in_team(redis=redis, session=session_with_commit, team_id=team.id)
+        if 0 < members_count >= hackathon.max_members:
+            raise MaxTeamMembersExceededException(team_id=team.id, max_members=hackathon.max_members)
+
+        new_member = await MemberDAO(session_with_commit).add(values=MemberCreate(
+            user_id=existing_user.telegram_id,
+            team_id=team.id,
+            tg_name=call.from_user.username,
+            role="member"
+        ))
+
+        await InviteDAO(session_with_commit).delete(filters=invite)
+
+        await invalidate_member_cache(redis=redis, team_id=team.id, hackathon_id=hackathon.id, tg_id=user_id,
+                                      member=new_member)
+        await invalidate_invite_cache(redis=redis, tg_id=call.from_user.id, invite_id=invite.id)
+        await invalidate_user_cache(redis=redis, tg_id=user_id, invalidate_teams=True)
+
+        await send_message_to_leader(
+            redis=redis,
+            session=session_with_commit,
+            team_id=team.id,
+            message=f"Пользователь {call.from_user.full_name} "
+                    f"(@{call.from_user.username}) принял приглашение в вашу команду!"
+        )
+
+        await redis.delete_key(key=f"invite_message_process:{invite.id}")
+
+        message = f"Вы вступили в команду{team.name}"
 
     except InvitationNotFoundException:
-        await call.message.edit_text("Приглашение не найдено")
+        message = "Приглашение не найдено"
+
     except TeamNotFoundException:
-        await call.message.edit_text("Команда не найдена")
-    except UserNotRegisteredForHackathon:
-        await call.message.edit_text("Вы не зарегистрированы на хакатон")
+        message = "Команда не найдена (возможно удалена)"
+
+    except UserNotRegisteredForApp:
+        message = "Вы не зарегистрированы в приложении, зарегистрируйтесь для принятия приглашения"
+
+    except MemberInTeamAlreadyExistsException:
+        message = "Вы уже состоите в команде, для принятия приглашения покиньте команду"
+
     except MaxTeamMembersExceededException:
-        await call.message.edit_text("В команде достигнуто максимальное количество участников")
+        message = "В команде достигнуто максимальное количество участников"
+
     except HackathonNotFoundException:
-        await call.message.edit_text("Хакатон, в котором участвует команда, не найден")
+        message = "Хакатон, в котором участвует команда, не найден"
+
     except Exception as e:
         logger.error(f"Ошибка при принятии приглашения в команду: {e}")
-        await call.message.edit_text("Произошла ошибка при принятии приглашения")
-    finally:
-        await call.message.answer("Вы вернулись в главное меню", reply_markup=main_keyboard(user_id=call.from_user.id))
+        message = "Произошла ошибка при принятии приглашения"
 
+    finally:
+        await clear_message_and_answer(call=call, message=message)
 
 
 @router.callback_query(F.data.startswith("reject_invite_"))
 async def reject_invite(call: CallbackQuery, session_with_commit: AsyncSession) -> None:
+
+    message = "Приглашение отклонено"
+    invite_id = int(call.data.split("_")[-1])
+
     try:
-        _, __, invite_id = call.data.split("_")
-        user_id = call.from_user.id
+        redis: CustomRedis = redis_client.get_client()
 
-        invite = await get_invite_by_id_from_redis(session=session_with_commit, invite_id=int(invite_id))
+        invite = await get_invite_data_by_id(redis=redis, session=session_with_commit, invite_id=int(invite_id))
+        if not invite:
+            raise InvitationNotFoundException
 
-        invite_key = f"invite:{invite_id}"
-        await redis.delete(invite_key)
+        await InviteDAO(session_with_commit).delete(filters=invite)
 
-        await InviteDAO.delete(session=session_with_commit, filters=invite)
+        await invalidate_invite_cache(redis=redis, tg_id=call.from_user.id, invite_id=invite_id)
 
-        await call.message.edit_text("Приглашение отклонено")
+        await send_message_to_leader(
+            redis=redis,
+            session=session_with_commit,
+            team_id=invite.team_id,
+            message=f"Пользователь {call.from_user.full_name} "
+                    f"(@{call.from_user.username}) отклонил приглашение в вашу команду!"
+        )
 
-        leader = await MemberDAO.find_one_or_none(session=session_with_commit,
-                                                  filters=SMember(team_id=invite.team_id, role="leader"))
-        if leader:
-            leader_user = await UserDAO.find_one_or_none(session=session_with_commit, filters=IdModel(id=leader.id))
-            if leader_user:
-                await bot.send_message(leader_user.telegram_id,
-                                       f"Пользователь {call.from_user.full_name} (@{call.from_user.username}) принял приглашение в вашу команду!",
-                                       reply_markup=main_keyboard(user_id=leader_user.telegram_id))
+        await redis.delete_key(key=f"invite_message_process:{invite.id}")
 
     except InvitationNotFoundException:
-        await call.message.edit_text("Приглашение не найдено")
+        message = "Приглашение не найдено"
+
     except Exception as e:
         logger.error(f"Ошибка при отклонении приглашения в команду: {e}")
-        await call.message.edit_text("Произошла ошибка при отклонении приглашения")
+        message = "Произошла ошибка при отклонении приглашения"
+
     finally:
-        await call.message.answer("Вы вернулись в главное меню", reply_markup=main_keyboard(user_id=call.from_user.id))
+        await clear_message_and_answer(call=call, message=message)
