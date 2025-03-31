@@ -5,6 +5,7 @@ from aiogram.exceptions import TelegramForbiddenError
 from fastapi import APIRouter, Depends, Body, Path
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.bot.utils.bot_utils import send_invite_to_user
 from app.db.models import Invite
 from app.redis.custom_redis import CustomRedis
 from app.redis.redis_client import get_redis
@@ -17,12 +18,14 @@ from app.redis.redis_operations.invite import get_all_invites_user_data, invalid
 from app.redis.redis_operations.user import invalidate_user_cache, redis_user_data
 from app.bot.keyboards.user_keyboards import invite_keyboard
 from app.api.typization.schemas import IdModel, NameModel, TeamCreate, InviteCreate, MemberCreate, TeamUpdate
-from app.api.typization.responses import STeam, SUser, ErrorResponse, STeamWithMembers, SuccessResponse
+from app.api.typization.responses import STeam, SUser, ErrorResponse, STeamWithMembers, SuccessResponse, SMember, \
+    SUserIsLeader
 from app.api.typization.exceptions import (TeamNotFoundException, TeamsNotFoundException,
                                            TeamNameAlreadyExistsException, MaxTeamMembersExceededException,
                                            InvitationAlreadyExistsException, MemberNotFoundException,
                                            UserNotFoundException, MemberInTeamException, TeamCloseException,
-                                           UserNotRegisteredToApp, HackathonNotFoundException)
+                                           UserNotRegisteredToApp, HackathonNotFoundException, TeamEmptyException,
+                                           ForbiddenException)
 from app.api.utils.auth_dep import fast_auth_user
 from app.api.utils.api_utils import exception_handler, check_registration_for_app, generate_response_model
 from app.db.dao import TeamDAO, MemberDAO, InviteDAO
@@ -49,7 +52,6 @@ async def get_all_teams(
         redis: CustomRedis = Depends(get_redis)
 ) -> List[STeam]:
     """Получает информацию о командах"""
-
     try:
 
         teams = await get_all_teams_data(redis=redis, session=session)
@@ -71,7 +73,7 @@ async def get_all_teams(
         200: generate_response_model(
             description="Успешный запрос. Возвращает информацию о команде и ее участниках (или же вместо участников null)",
             model=STeamWithMembers),
-        404: generate_response_model("Команда не найдена"),
+        404: generate_response_model("Команда не найдена или в ней нет участников"),
         422: generate_response_model("Ошибка валидации входных данных"),
         500: generate_response_model()
     }
@@ -135,11 +137,7 @@ async def create_team(
         if existing_team:
             raise TeamNameAlreadyExistsException
 
-        member_for_hackathon = await find_existing_member_by_hackathon(
-            redis=redis, session=session,
-            user_id=user.telegram_id,
-            hackathon_id=team.hackathon_id
-        )
+        member_for_hackathon = await MemberDAO(session).find_existing_member(user_id=user.telegram_id, hackathon_id=team.hackathon_id)
         if member_for_hackathon:
             raise MemberInTeamException
 
@@ -152,7 +150,7 @@ async def create_team(
             role="leader"
         ))
 
-        await invalidate_team_cache(redis=redis, hackathon_id=team.hackathon_id, team=new_team)
+        await invalidate_team_cache(redis=redis, hackathon_id=team.hackathon_id, team=STeam(**new_team.to_dict()))
         await invalidate_user_cache(redis=redis, tg_id=user.telegram_id, invalidate_teams=True)
 
         await redis.set_value_with_ttl(key=f"team:{new_team.id}", value=json.dumps(new_team.to_dict()))
@@ -266,6 +264,39 @@ async def delete_team(
         raise
 
 
+@router.get(
+    path="/{team_id}/leader",
+    summary="Проверить, является ли пользователь лидером команды",
+    response_model=Union[SUserIsLeader, ErrorResponse],
+    responses={
+        200: generate_response_model(
+            description="Успешный запрос. Возвращает информацию о том, является ли пользователь лидером команды",
+            model=SUserIsLeader),
+        401: generate_response_model("Ошибка авторизации"),
+        404: generate_response_model("Не найден пользователь или команда"),
+        500: generate_response_model()
+    }
+)
+@exception_handler
+async def check_user_is_leader(
+        team_id: int,
+        session: AsyncSession = Depends(db.get_db),
+        redis: CustomRedis = Depends(get_redis),
+        user: SUser = Depends(fast_auth_user)
+) -> SUserIsLeader:
+    """Проверяет, является ли пользователь лидером команды"""
+
+    try:
+        leader = await get_member_data_by_team_id(redis=redis, session=session, team_id=team_id, role="leader")
+        if not leader or leader.user_id != user.telegram_id:
+            return SUserIsLeader(is_leader=False)
+        else:
+            return SUserIsLeader(is_leader=True)
+    except Exception as e:
+        logger.error(f"Ошибка при проверке пользователя на лидерство: {e}")
+        raise
+
+
 @router.post(
     path="/{team_id}/join",
     summary="Вступить команду по ID",
@@ -277,7 +308,8 @@ async def delete_team(
         400: generate_response_model("Команда переполнена, вступить нельзя"),
         401: generate_response_model("Ошибка авторизации"),
         403: generate_response_model("Команда закрытого типа, вход разрешен только по приглашениям"),
-        404: generate_response_model("Пользователь не найден или не зарегистрирован или не найдена команда или участник"),
+        404: generate_response_model(
+            "Пользователь не найден или не зарегистрирован или не найдена команда или участник"),
         409: generate_response_model("Участник уже участвует в хакатоне с другой командой"),
         422: generate_response_model("Ошибка валидации входных данных"),
         500: generate_response_model()
@@ -322,20 +354,27 @@ async def join_to_team(
         if 0 < members_count >= current_hackathon.max_members:
             raise MaxTeamMembersExceededException
 
-        await MemberDAO(session).add(values=MemberCreate(
-            user_id=user.id,
+        new_member = await MemberDAO(session).add(values=MemberCreate(
+            user_id=user.telegram_id,
             team_id=current_team.id,
             tg_name=user.username,
             role="member"
         ))
 
-        await invalidate_member_cache(redis=redis, hackathon_id=current_team.hackathon_id, team_id=current_team.id)
+        await invalidate_member_cache(
+            redis=redis,
+            hackathon_id=current_team.hackathon_id,
+            team_id=current_team.id,
+            tg_id=user.telegram_id,
+            member=SMember(**new_member.to_dict())
+        )
+
         await invalidate_user_cache(redis=redis, tg_id=user.telegram_id)
 
         return SuccessResponse(message="Вы успешно присоединились к команде")
 
     except Exception as e:
-        logger.error(f"Ошибка при выходе из команды: {e}")
+        logger.error(f"Ошибка при вступлении в команду: {e}")
         raise
 
 
@@ -371,7 +410,7 @@ async def leave_from_team(
         current_team_id = current_team.id
         tg_id = user.telegram_id
 
-        existing_member = await get_member_data_by_team_id(redis=redis, session=session, team_id=current_team.id,
+        existing_member = await get_member_data_by_team_id(redis=redis, session=session, team_id=current_team_id,
                                                            user_id=tg_id)
         if not existing_member:
             raise MemberNotFoundException
@@ -382,7 +421,7 @@ async def leave_from_team(
 
         if existing_member.role == "leader":
 
-            await TeamDAO(session).delete(filters=IdModel(id=current_team.id))
+            await TeamDAO(session).delete(filters=IdModel(id=current_team_id))
 
             await invalidate_team_cache(redis=redis, hackathon_id=hackathon_id, team_id=current_team_id)
 
@@ -400,7 +439,8 @@ async def leave_from_team(
             await invalidate_member_cache(
                 redis=redis,
                 hackathon_id=hackathon_id,
-                team_id=current_team.id,
+                team_id=current_team_id,
+                tg_id=tg_id,
                 invalidate_member=True
             )
 
@@ -445,13 +485,18 @@ async def invite_user_to_team(
         if not invite_user:
             raise UserNotFoundException
 
-        existing_invite = await get_all_invites_user_data(
+        existing_invites = await get_all_invites_user_data(
             redis=redis,
             session=session,
             invite_user_tg_id=invite.invite_user_id
         )
-        if existing_invite:
-            raise InvitationAlreadyExistsException
+
+        if existing_invites:
+
+            team_ids = [invite.team_id for invite in existing_invites]
+
+            if invite.team_id in team_ids:
+                raise InvitationAlreadyExistsException
 
         current_team = await get_team_if_user_is_leader(
             redis=redis, session=session,
@@ -475,24 +520,14 @@ async def invite_user_to_team(
 
         await invalidate_invite_cache(redis=redis, tg_id=user.telegram_id)
 
-        await redis.set_value_with_ttl(f"invite:{add_invite.id}", value=json.dumps(add_invite.to_dict()))
+        await redis.set_value_with_ttl(key=f"invite:{add_invite.id}", value=json.dumps(add_invite.to_dict()))
 
-        try:
-
-            await bot.send_message(
-                chat_id=add_invite.invite_user_id,
-                text=f"Вам пришло приглашение в команду {current_team.name}"
-                     f"Описание команды: {current_team.description or 'нет'}",
-                reply_markup=invite_keyboard(invite_id=add_invite.id)
-            )
-
-        except TelegramForbiddenError:
-            logger.warning(
-                f"Бот заблокирован пользователем {add_invite.invite_user_id}. Невозможно отправить приглашение.")
-
-        except Exception as e:
-            logger.error(f"Ошибка при отправке приглашения пользователю {add_invite.invite_user_id}: {e}")
-            raise
+        await send_invite_to_user(
+            redis=redis,
+            invite_id=add_invite.id,
+            invite_user_tg_id=add_invite.invite_user_id,
+            team=current_team
+        )
 
         return SuccessResponse(message="Вы успешно пригласили пользователя в команду")
 

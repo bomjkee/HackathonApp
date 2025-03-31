@@ -49,6 +49,7 @@ class TeamDAO(BaseDAO[Team]):
             result = await self._session.execute(query)
             teams = result.scalars().all()
 
+            logger.info(teams)
             if len(teams) > 0:
                 logger.info(f"Команды найдены для пользователя c ID {user_id}: {teams}")
             else:
@@ -92,7 +93,7 @@ class MemberDAO(BaseDAO[Member]):
 
     async def find_members_by_hackathon(self, filters: HackathonIDModel):
         try:
-            hackathon_id = filters.model_dump(exclude_unset=True)
+            hackathon_id = filters.hackathon_id
             logger.info(f"Поиск существующих участников для hackathon_id: {hackathon_id}")
             query = (
                 select(self.model)
@@ -102,7 +103,7 @@ class MemberDAO(BaseDAO[Member]):
 
             result = await self._session.execute(query)
             members = result.scalars().all()
-
+            logger.info(members)
             if members:
                 logger.info(f"Найдены участники для hackathon_id: {hackathon_id}")
             else:

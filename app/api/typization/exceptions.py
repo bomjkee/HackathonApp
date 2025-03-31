@@ -85,7 +85,7 @@ TeamNameAlreadyExistsException = HTTPException(
 # Команда у данного пользователя существует
 MemberInTeamException = HTTPException(
     status_code=status.HTTP_409_CONFLICT,
-    detail="Пользователь уже состоит в команде"
+    detail="Вы уже состоите в команде на этом хакатоне"
 )
 """Выбрасывается, если пользователь уже является участником указанной команды."""
 
@@ -112,6 +112,15 @@ MemberNotFoundException = HTTPException(
     detail='Участник команды не найден'
 )
 """Выбрасывается, если участник команды с указанным ID не найден."""
+
+
+
+# Участник команды не найден
+TeamEmptyException = HTTPException(
+    status_code=status.HTTP_404_NOT_FOUND,
+    detail='В команде нет участников, она не действительна'
+)
+"""Выбрасывается, если в команде нет участников."""
 
 
 # Хакатоны не найдены

@@ -48,6 +48,9 @@ async def cmd_start(message: Message, session_with_commit: AsyncSession) -> None
             await message.answer(f'Добро пожаловать, {message.from_user.full_name}',
                                  reply_markup=main_keyboard(message.from_user.id))
         else:
+            redis: CustomRedis = redis_client.get_client()
+            await bot_cleanup_invites(redis=redis, user_id=message.from_user.id, session=session_with_commit)
+
             await message.answer(f'C возвращением, {message.from_user.full_name}',
                                  reply_markup=main_keyboard(message.from_user.id))
     except Exception as e:

@@ -44,7 +44,7 @@ async def get_teams_data_by_user(redis: CustomRedis, session: AsyncSession, user
                                                 fetch_data_func=TeamDAO(session).find_all_teams_by_user_id,
                                                 model=STeam,
                                                 user_id=user_id,
-                                                ttl=7200, )
+                                                ttl=3600)
 
         if team_data is None:
             logger.error(f"Команда пользователя с ID {user_id} не найдена.")
@@ -63,7 +63,6 @@ async def invalidate_user_cache(
         tg_id: int,
         invalidate_teams: bool = False,
         invalidate_user: bool = False,
-        user_info: SUser | None = None
 ) -> None:
 
     if invalidate_user:

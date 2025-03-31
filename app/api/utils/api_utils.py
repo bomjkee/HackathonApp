@@ -99,29 +99,26 @@ def exception_handler(f):
                 status_code=422,
                 content=error_response.model_dump(),
             )
-
         except HTTPException as e:
             logger.warning(
                 f"HTTPException в функции: {f.__name__} with args: {args} and\n"
                 f"kwargs: {kwargs}\n - {e.detail} (status_code: {e.status_code})"
             )
 
-            error = Error(code=f"HTTP_{e.status_code}", message=e.detail)
+            error = Error(code=e.status_code, message=e.detail)
             error_response = ErrorResponse(status="error", data=error)
 
-            return JSONResponse(
-                status_code=e.status_code, content=error_response.model_dump()
-            )
+            return error_response
 
         except Exception as e:
             logger.error(
                 f"Неизвестная ошибка в функции: {f.__name__} with args: {args} and\n"
                 f"kwargs: {kwargs}\n - {e}"
             )
-            error = Error(code="INTERNAL_SERVER_ERROR", message=str(e))
+            error = Error(code=500, message=str(e))
             error_response = ErrorResponse(status="error", data=error)
 
-            return JSONResponse(status_code=500, content=error_response.model_dump(), )
+            return JSONResponse(status_code=500, content=error_response.model_dump())
 
     return decorated_function
 

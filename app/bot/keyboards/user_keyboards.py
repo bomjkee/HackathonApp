@@ -22,6 +22,13 @@ def back_keyboard() -> InlineKeyboardMarkup:
     return kb.as_markup(resize_keyboard=True)
 
 
+def delete_message_keyboard() -> InlineKeyboardMarkup:
+    kb = InlineKeyboardBuilder()
+    kb.button(text="Удалить", callback_data="delete_message")
+    kb.adjust(1)
+    return kb.as_markup()
+
+
 def invite_keyboard(invite_id: int) -> InlineKeyboardMarkup:
     kb = InlineKeyboardBuilder()
     kb.button(text="✔️ Принять приглашение", callback_data=f"accept_invite_{invite_id}")

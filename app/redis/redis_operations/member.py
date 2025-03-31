@@ -18,23 +18,16 @@ async def get_all_members_data(
     try:
 
         members_cache_key = f"members"
-        filters = None
+        filters = {}
         fetch_data = MemberDAO(session).find_all
-        members_data: List[SMember] | None = None
 
         if team_id:
             members_cache_key += f":team:{team_id}"
             filters = MemberFind(team_id=team_id)
 
-
-        elif hackathon_id:
-            members_cache_key += f":hackathon:{hackathon_id}"
-            filters = HackathonIDModel(hackathon_id=hackathon_id)
-            fetch_data = MemberDAO(session).find_members_by_hackathon
-
         members_data = await redis.get_cached_data(cache_key=members_cache_key,
                                                    fetch_data_func=fetch_data,
-                                                   model=STeam,
+                                                   model=SMember,
                                                    filters=filters)
 
         if members_data is None:
@@ -58,11 +51,11 @@ async def get_member_data_by_team_id(
 ) -> SMember | None:
     try:
 
-        member_cache_key = f"members:team:{team_id}:"
+        member_cache_key = f"members:team:{team_id}"
         filters = MemberFind(team_id=team_id)
 
         if role == "leader":
-            member_cache_key = f":leader"
+            member_cache_key += f":leader"
             filters.role = role
 
         elif user_id:
@@ -116,9 +109,9 @@ async def find_existing_member_by_hackathon(
     try:
 
         members_data = await get_all_members_data(redis=redis, session=session, hackathon_id=hackathon_id)
-
         member = next((m for m in members_data if m.user_id == user_id), None)
-        if member:
+
+        if member is not None:
             logger.info(f"Участник с user_id {user_id} и hackathon_id {hackathon_id} найден.")
         else:
             logger.info(f"Участник с user_id {user_id} и hackathon_id {hackathon_id} не найден.")
@@ -150,9 +143,11 @@ async def invalidate_member_cache(
     members_team_cache_key = f"members:team:{team_id}"
     await redis.delete_key(members_team_cache_key)
 
-    if invalidate_member and tg_id:
+    if tg_id:
         member_cache_key = f"members:team:{team_id}:member:{tg_id}"
-        await redis.delete_key(member_cache_key)
+
+        if invalidate_member:
+            await redis.delete_key(member_cache_key)
 
         if member:
             await redis.set_value_with_ttl(key=member_cache_key, value=json.dumps(member.model_dump()))

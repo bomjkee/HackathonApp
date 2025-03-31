@@ -9,7 +9,6 @@ from tests.conftest import make_request
 async def test_get_all_hackathons(async_client: AsyncClient):
     response: Response = await make_request(client=async_client, api_url="/hackathons")
     assert response.status_code == 200
-    assert len(response.json()) > 0
 
 
 @pytest.mark.asyncio

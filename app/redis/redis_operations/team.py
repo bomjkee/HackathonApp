@@ -1,6 +1,7 @@
 import json
 from typing import List
 from loguru import logger
+from sqlalchemy import false
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.redis.custom_redis import CustomRedis
@@ -15,7 +16,7 @@ from app.api.typization.schemas import IdModel, HackathonIDModel
 async def get_all_teams_data(
         redis: CustomRedis,
         session: AsyncSession,
-        find_by_hackathon: bool | None = None,
+        find_by_hackathon: bool = False,
         hackathon_id: int | None = None
 ) -> List[STeam] | None:
     try:
@@ -28,16 +29,18 @@ async def get_all_teams_data(
             filters = HackathonIDModel(hackathon_id=hackathon_id)
 
         teams_data = await redis.get_cached_data(cache_key=teams_cache_key,
-                                                 fetch_data_func=TeamDAO(session).find_all,
-                                                 model=STeam,
-                                                 filters=filters)
+                                             fetch_data_func=TeamDAO(session).find_all,
+                                             model=STeam,
+                                             filters=filters)
 
         if teams_data is None:
-            logger.error(f"Команды не найден.")
+            logger.error(f"Команды не найдены.")
             return None
 
+        return teams_data
+
     except Exception as e:
-        logger.error(f"Ошибка при получении команды: {e}")
+        logger.error(f"Ошибка при получении команд: {e}")
         return None
 
 
@@ -53,7 +56,7 @@ async def get_team_data(redis: CustomRedis, session: AsyncSession, team_id: int)
                                                 filters=IdModel(id=team_id))
 
         if team_data is None:
-            logger.error(f"Команда с ID {team_id} не найден.")
+            logger.error(f"Команда с ID {team_id} не найдена.")
             return None
 
         return team_data

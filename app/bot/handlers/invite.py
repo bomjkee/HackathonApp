@@ -10,7 +10,7 @@ from app.redis.custom_redis import CustomRedis
 from app.redis.redis_client import redis_client
 from app.redis.redis_operations.hackathon import get_hackathon_data
 from app.redis.redis_operations.invite import get_all_invites_user_data, get_invite_data_by_id, \
-    invalidate_invite_cache
+    invalidate_invite_cache, bot_cleanup_invites
 from app.redis.redis_operations.member import find_existing_member_by_hackathon, count_members_in_team, \
     invalidate_member_cache
 from app.redis.redis_operations.team import get_team_data
@@ -41,6 +41,7 @@ async def get_invites(call: CallbackQuery, session_without_commit: AsyncSession)
                                     keyboard=main_keyboard(user_id=call.from_user.id))
             return
 
+        await bot_cleanup_invites(redis=redis, user_id=call.from_user.id, session=session_without_commit)
         await delete_message(call=call)
 
         for invite in invites_data:
@@ -90,12 +91,7 @@ async def accept_invite(call: CallbackQuery, session_with_commit: AsyncSession) 
         if not hackathon:
             raise HackathonNotFoundException(hackathon_id=team.hackathon_id)
 
-        existing_member = await find_existing_member_by_hackathon(
-            redis=redis,
-            session=session_with_commit,
-            hackathon_id=hackathon.id,
-            user_id=user_id
-        )
+        existing_member = await MemberDAO(session_with_commit).find_existing_member(user_id=user_id, hackathon_id=hackathon.id)
         if existing_member:
             raise MemberInTeamAlreadyExistsException()
 
@@ -192,3 +188,9 @@ async def reject_invite(call: CallbackQuery, session_with_commit: AsyncSession) 
 
     finally:
         await clear_message_and_answer(call=call, message=message)
+
+
+
+@router.callback_query(F.data == "delete_message")
+async def delete_message_handler(call: CallbackQuery):
+    await delete_message(call=call)

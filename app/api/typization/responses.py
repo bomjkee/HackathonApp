@@ -1,6 +1,7 @@
 from typing import List, TypeVar
 from pydantic import BaseModel, Field
 
+from app.api.typization.schemas import TelegramIDModel
 
 T = TypeVar(name="T", bound=BaseModel)
 
@@ -17,7 +18,7 @@ class SUser(BaseModel):
 
 
 
-class SUserInfo(BaseModel):
+class SUserInfo(TelegramIDModel):
     username: str | None = Field(None, description="Tg username пользователя")
     first_name: str | None = Field(None, description="Tg first name пользователя")
     last_name: str | None = Field(None, description="Tg last name пользователя")
@@ -25,8 +26,11 @@ class SUserInfo(BaseModel):
 
 
 class SUserCheckRegistration(BaseModel):
-    is_registered: bool = Field(False, description="Зарегистрирован ли пользователь в MiniApp")
+    is_registered: bool = Field(..., description="Зарегистрирован ли пользователь в MiniApp")
 
+
+class SUserIsLeader(BaseModel):
+    is_leader: bool = Field(False, description="Является ли пользователь лидером команды")
 
 
 class SHackathons(BaseModel):
@@ -58,7 +62,7 @@ class STeam(BaseModel):
 
 class ProfileInfo(BaseModel):
     user: SUserInfo = Field(..., description="Информация о пользователе")
-    team: List[STeam] | None = Field(None, description="Информация о команде")
+    teams: List[STeam] | None = Field(..., description="Информация о командах")
 
 
 
@@ -85,13 +89,13 @@ class SInvite(BaseModel):
 
 
 class SuccessResponse(BaseModel):
-    status: str = Field("Success", description="Статус ответа")
+    status: str = Field("success", description="Статус ответа")
     message: str = Field(..., description="Сообщение")
 
 
 
 class Error(BaseModel):
-    code: str = Field(..., description="Код ошибки")
+    code: int = Field(..., description="Код ошибки")
     message: str = Field(..., description="Сообщение об ошибке")
 
 

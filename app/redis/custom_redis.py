@@ -104,6 +104,7 @@ class CustomRedis(Redis):
                 ]
                 models = [model(**item) for item in processed_data]
                 await self.set_value_with_ttl(key=cache_key, ttl=ttl, value=json.dumps(processed_data))
+
                 logger.info(f"Список данных сохранены в кэш для ключа: {cache_key} с TTL: {ttl} сек")
                 return models
 
@@ -111,8 +112,10 @@ class CustomRedis(Redis):
                 processed_data = data.to_dict() if hasattr(data, 'to_dict') else data
                 model_instance = model(**processed_data)
                 await self.set_value_with_ttl(key=cache_key, ttl=ttl, value=json.dumps(processed_data))
+
                 logger.info(f"Данные сохранены в кэш для ключа: {cache_key} с TTL: {ttl} сек")
                 return model_instance
+
 
         except Exception as e:
             logger.error(f"Ошибка при получении данных из базы данных или создании Pydantic модели: {e}")
