@@ -53,13 +53,14 @@ async def get_hackathon_data(redis: CustomRedis, session: AsyncSession, hackatho
 
 
 
-async def invalidate_hackathon_data(redis: CustomRedis, hackathon_id: int, invalidate_teams: bool = False) -> None:
+async def invalidate_hackathon_cache(redis: CustomRedis, hackathon_id: int | None = None, invalidate_teams: bool = False) -> None:
 
     hackathon_list_cache_key = "hackathons"
     await redis.delete_key(hackathon_list_cache_key)
 
-    hackathon_cache_key = f"hackathon:{hackathon_id}"
-    await redis.delete_key(hackathon_cache_key)
+    if hackathon_id:
+        hackathon_cache_key = f"hackathon:{hackathon_id}"
+        await redis.delete_key(hackathon_cache_key)
 
     if invalidate_teams:
         await invalidate_team_cache(redis=redis, hackathon_id=hackathon_id)

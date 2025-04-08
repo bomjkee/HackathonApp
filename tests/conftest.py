@@ -17,7 +17,7 @@ async def make_request(client: AsyncClient, api_url: str, headers: dict | None =
     """
     method = method.upper()
 
-    url = f"{settings.BASE_SITE}{api_url}"
+    url = f"api.hackathonmirea.ru"
 
     try:
         match method:

@@ -79,8 +79,6 @@ async def register_user(
 
         await invalidate_user_cache(redis=redis, tg_id=user.telegram_id, invalidate_user=True)
 
-        await redis_user_data(tg_id=user.telegram_id)
-
         return SuccessResponse(message="Пользователь успешно зарегистрирован")
 
     except Exception as e:

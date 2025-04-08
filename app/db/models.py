@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import Integer, BigInteger, ForeignKey
+from sqlalchemy import Integer, BigInteger, ForeignKey, TIMESTAMP
 from datetime import datetime
 from typing import List
 from app.db.database import Base
@@ -37,8 +37,8 @@ class Hackathon(Base):
     start_description: Mapped[str]
     description: Mapped[str]
     max_members: Mapped[int]
-    start_date: Mapped[datetime | None]
-    end_date: Mapped[datetime | None]
+    start_date: Mapped[datetime | None] = mapped_column(TIMESTAMP)
+    end_date: Mapped[datetime | None] = mapped_column(TIMESTAMP)
 
     teams: Mapped[List["Team"]] = relationship("Team", back_populates="hackathon")
 

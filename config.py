@@ -8,12 +8,12 @@ from aiogram.client.default import DefaultBotProperties
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
+
 class Settings(BaseSettings):
     BOT_TOKEN: str
 
     ADMINS_ID: List[int]
 
-    BASE_SITE: str
     FRONT_SITE: str
 
     DB_LOGIN: str
@@ -38,9 +38,6 @@ class Settings(BaseSettings):
         env_file=os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
     )
 
-    def get_webhook_url(self) -> str:
-        return f"{self.BASE_SITE}/webhook"
-
     def get_db_url(self) -> str:
         return f"postgresql+asyncpg://{self.DB_LOGIN}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
 
@@ -56,7 +53,6 @@ dp = Dispatcher(storage=MemoryStorage())
 admins = settings.ADMINS_ID
 
 front_site_url = settings.FRONT_SITE
-base_site_url = settings.BASE_SITE
 
 db_url = settings.get_db_url()
 

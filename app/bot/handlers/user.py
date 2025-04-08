@@ -62,7 +62,6 @@ async def cmd_start(message: Message, session_with_commit: AsyncSession) -> None
 @router.message(Command('info'))
 async def cmd_info(message: Message):
 
-    logger.info(f"Пользователь {message.from_user.username} нажал /info")
     bot_description = get_bot_description()
 
     await message.answer(f"Описание бота```{bot_description}```", parse_mode='Markdown', reply_markup=back_keyboard())
@@ -71,7 +70,6 @@ async def cmd_info(message: Message):
 
 @router.callback_query(F.data == 'info')
 async def callback_info(call: CallbackQuery, session_without_commit: AsyncSession):
-    logger.info(f"Пользователь {call.from_user.username} запросил информацию о боте")
     bot_description = get_bot_description()
 
     redis: CustomRedis = redis_client.get_client()
@@ -83,14 +81,12 @@ async def callback_info(call: CallbackQuery, session_without_commit: AsyncSessio
 
 @router.callback_query(F.data == 'back_home')
 async def go_back(call: CallbackQuery):
-    logger.info(f"Пользователь {call.from_user.username} вернулся назад")
     await send_edit_message(call=call, message="Вы вернулись назад", keyboard=main_keyboard(user_id=call.from_user.id))
 
 
 
 @router.message(F.photo)
 async def photo_handler(message: Message):
-    logger.info(f"Пользователь {message.from_user.username} отправил фото")
     await message.answer(f"Id фотографии: `{message.photo[-1].file_id}`", parse_mode='MarkdownV2',
                          reply_markup=back_keyboard())
 
@@ -98,17 +94,15 @@ async def photo_handler(message: Message):
 
 @router.message(F.document)
 async def document_handler(message: Message):
-    logger.info(f"Пользователь {message.from_user.username} отправил документ")
     await message.answer(f"Id документа: `{message.document.file_id}`", parse_mode='MarkdownV2',
                          reply_markup=back_keyboard())
 
 
 
-@router.message(F.text)
-async def no_handler(message: Message):
-    logger.info(f"Пользователь {message.from_user.username} отправил нераспознанный текст")
-    await message.answer(f"{message.from_user.username}, ваше сообщение не распознано",
-                         reply_markup=main_keyboard(message.from_user.id))
+# @router.message(F.text)
+# async def no_handler(message: Message):
+#     await message.answer(f"{message.from_user.username}, ваше сообщение не распознано",
+#                          reply_markup=main_keyboard(message.from_user.id))
 
 
 

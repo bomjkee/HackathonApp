@@ -1,4 +1,5 @@
 from pydantic import BaseModel, ConfigDict, Field, validator, field_validator
+from datetime import datetime
 
 
 class IdModel(BaseModel):
@@ -73,3 +74,18 @@ class InviteFilter(BaseModel):
 class InviteCreate(BaseModel):
     invite_user_id: int = Field(..., description="ID приглашаемого пользователя")
     team_id: int = Field(..., description="ID команды")
+
+
+class HackathonCreate(BaseModel):
+    name: str = Field(..., description="Название хакатона")
+    start_description: str = Field(..., description="Вступительное описание")
+    description: str = Field(..., description="Описание хакатона")
+    max_members: int = Field(..., description="Максимальное количество участников")
+    start_date: datetime | None = Field(None, description="Дата начала в timestamp")
+    end_date: datetime | None = Field(None, description="Дата окончания в timestamp")
+
+    @field_validator("max_members")
+    def validate_max_members(cls, v):
+        if v < 1:
+            raise ValueError("Максимальное количество участников должно быть больше 0")
+        return v

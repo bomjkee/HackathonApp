@@ -31,6 +31,36 @@ class UserDAO(BaseDAO[User]):
             logger.error(f"Ошибка при получении user_id по telegram_id {telegram_id}: {e}")
             raise
 
+    async def get_hackathon_participants(self, hackathon_id: int) -> list[User]:
+        """
+        Получает всех пользователей, которые являются участниками хакатона
+        (состоят в командах, участвующих в хакатоне).
+        """
+        try:
+            logger.info(f"Поиск участников хакатона с ID: {hackathon_id}")
+
+            query = (
+                select(self.model)
+                .join(Member, self.model.telegram_id == Member.user_id)
+                .join(Team, Member.team_id == Team.id)
+                .where(Team.hackathon_id == hackathon_id)
+                .distinct()
+            )
+
+            result = await self._session.execute(query)
+            participants = result.scalars().all()
+
+            if participants:
+                logger.info(f"Найдено {len(participants)} участников хакатона с ID: {hackathon_id}")
+            else:
+                logger.info(f"Участники хакатона с ID: {hackathon_id} не найдены")
+
+            return participants
+
+        except SQLAlchemyError as e:
+            logger.error(f"Ошибка при поиске участников хакатона {hackathon_id}: {e}")
+            raise
+
 
 class TeamDAO(BaseDAO[Team]):
     model = Team
@@ -90,28 +120,6 @@ class MemberDAO(BaseDAO[Member]):
             logger.error(f"Ошибка при поиске участника с user_id {user_id} и hackathon_id {hackathon_id}: {e}")
             raise
 
-
-    async def find_members_by_hackathon(self, filters: HackathonIDModel):
-        try:
-            hackathon_id = filters.hackathon_id
-            logger.info(f"Поиск существующих участников для hackathon_id: {hackathon_id}")
-            query = (
-                select(self.model)
-                .join(Team, self.model.team_id == Team.id)
-                .where(Team.hackathon_id == hackathon_id)
-            )
-
-            result = await self._session.execute(query)
-            members = result.scalars().all()
-            logger.info(members)
-            if members:
-                logger.info(f"Найдены участники для hackathon_id: {hackathon_id}")
-            else:
-                logger.info(f"Участники для hackathon_id: {hackathon_id} не найдены")
-            return members
-        except SQLAlchemyError as e:
-            logger.error(f"Ошибка при поиске участника для hackathon_id {hackathon_id}: {e}")
-            raise
 
 
 class InviteDAO(BaseDAO[Invite]):

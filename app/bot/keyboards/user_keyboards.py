@@ -8,7 +8,7 @@ def main_keyboard(user_id: int) -> InlineKeyboardMarkup:
     kb = InlineKeyboardBuilder()
     kb.button(text="🌐 Открыть приложение", web_app=WebAppInfo(url=f"{front_site_url}"))
     kb.button(text="📚 Информация", callback_data="info")
-    kb.button(text="✉️ Мои приглашения", callback_data="invites")
+    kb.button(text="✉️ Мои приглашения в команду", callback_data="invites")
     if user_id in admins:
         kb.button(text="🔑 Админ панель", callback_data="admin_panel")
     kb.adjust(1)
@@ -24,9 +24,9 @@ def back_keyboard() -> InlineKeyboardMarkup:
 
 def delete_message_keyboard() -> InlineKeyboardMarkup:
     kb = InlineKeyboardBuilder()
-    kb.button(text="Удалить", callback_data="delete_message")
+    kb.button(text="🗑️ Удалить", callback_data="delete_message")
     kb.adjust(1)
-    return kb.as_markup()
+    return kb.as_markup(resize_keyboard=True)
 
 
 def invite_keyboard(invite_id: int) -> InlineKeyboardMarkup:

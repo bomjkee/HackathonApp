@@ -21,7 +21,7 @@ from app.api.typization.bot_exceptions import TeamNotFoundException, InvitationN
 from app.api.typization.schemas import MemberCreate
 from app.api.utils.api_utils import check_registration_for_app
 from app.bot.keyboards.user_keyboards import main_keyboard, invite_keyboard
-from app.bot.utils.bot_utils import send_message_to_leader, send_edit_message, delete_message, clear_message_and_answer
+from app.bot.utils.bot_utils import send_message_to_leader, send_edit_message, clear_message_and_answer
 from app.db.dao import MemberDAO, InviteDAO
 
 router = Router()
@@ -42,7 +42,7 @@ async def get_invites(call: CallbackQuery, session_without_commit: AsyncSession)
             return
 
         await bot_cleanup_invites(redis=redis, user_id=call.from_user.id, session=session_without_commit)
-        await delete_message(call=call)
+        await call.message.delete()
 
         for invite in invites_data:
 
@@ -193,4 +193,5 @@ async def reject_invite(call: CallbackQuery, session_with_commit: AsyncSession) 
 
 @router.callback_query(F.data == "delete_message")
 async def delete_message_handler(call: CallbackQuery):
-    await delete_message(call=call)
+    await call.message.delete()
+    await call.answer()

@@ -65,27 +65,17 @@ async def send_edit_message(call: CallbackQuery, message: str, keyboard: InlineK
     try:
         logger.info(f"Отправка сообщения пользователю {call.from_user.username}")
         await call.message.edit_text(text=f"`{message}`", reply_markup=keyboard, parse_mode="Markdown")
+        await call.answer()
 
     except TelegramBadRequest:
         logger.warning("Ошибка при отправке сообщения (спам или пустое сообщение).")
         await call.answer(message)
 
 
-async def delete_message(call: CallbackQuery) -> None:
-
-    try:
-        logger.info("Удаляем сообщение")
-        await bot.delete_message(chat_id=call.from_user.id, message_id=call.message.message_id)
-
-    except Exception as e:
-        logger.warning(f"Произошла ошибка при удалении сообщения: {e}")
-        await call.answer()
-
-
 async def clear_message_and_answer(call: CallbackQuery, message: str) -> None:
 
     try:
-        await delete_message(call)
+        await call.message.delete()
         await call.answer(message)
 
     except Exception as e:
@@ -94,9 +84,19 @@ async def clear_message_and_answer(call: CallbackQuery, message: str) -> None:
 
 
 def get_bot_description() -> str:
-    description = ("MiniApp приложение для регистрации в хакатонах РТУ МИРЭА, "
-                   "созданное на основе фреймворка FastAPI и библиотеки aiogram. "
-                   "Для обработки данных используется Redis и PostgreSQL. "
-                   "Клиентская часть написана на React.ts, axios, zod, sdk-react со сборкой на Vite")
+    description = (
+        "🤖 MiniApp Bot - Ваш персональный помощник для участия в хакатонах РТУ МИРЭА\n\n"
+        "🔹 Основные возможности:\n"
+        "• Регистрация и управление командами\n"
+        "• Просмотр актуальных хакатонов\n"
+        "• Удобная система подачи заявок\n"
+        "• Получение уведомлений о важных событиях\n\n"
+        "🔹 Технологический стек:\n"
+        "• Backend: FastAPI, aiogram\n"
+        "• Базы данных: PostgreSQL, Redis\n"
+        "• Frontend: React.ts, Vite, axios, zod\n"
+        "• Интеграция: sdk-react\n\n"
+        "🎯 Наша цель - сделать участие в хакатонах максимально удобным и эффективным!"
+    )
 
     return description

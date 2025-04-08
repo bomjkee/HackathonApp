@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List, TypeVar
 from pydantic import BaseModel, Field
 
@@ -46,8 +47,8 @@ class SHackathonInfo(BaseModel):
     start_description: str = Field(..., description="Вступительное описание")
     description: str = Field(..., description="Описание хакатона")
     max_members: int = Field(..., description="Максимальное количество участников")
-    start_date: int | None = Field(None, description="Дата начала")
-    end_date: int | None = Field(None, description="Дата окончания")
+    start_date: datetime | None = Field(None, description="Дата начала")
+    end_date: datetime | None = Field(None, description="Дата окончания")
 
 
 
